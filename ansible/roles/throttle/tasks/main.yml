@@ -1,0 +1,16 @@
+---
+- name: CPU intensive task
+  command: sleep 1
+  throttle: 1
+
+- name: Simple task
+  command: sleep 1
+
+- name: block
+  block:
+    - name: block_task_1
+      command: sleep 1
+
+    - name: block_task_2
+      command: sleep 1
+  throttle: 2

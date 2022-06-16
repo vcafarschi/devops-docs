@@ -1,0 +1,20 @@
+---
+- hosts: database
+  gather_facts: false
+  tasks:
+    - name: "Create additional vars"
+      command: ./pass.sh
+      delegate_to: localhost
+
+
+- hosts: webapp
+  gather_facts: false
+  vars_files:
+    - vars/extra_vars.yml
+  tasks:
+    - name: "Debug tomcat vars"
+      debug:
+        msg: "db {{ db_pass }}; app {{ app_pass }}; keystore {{ keystore_pass }}"
+
+
+

@@ -1,0 +1,23 @@
+---
+all:
+  children:
+    db:
+      hosts:
+        18.222.120.236:
+        18.222.120.237:
+      vars:
+        ansible_user: oracle
+        ansible_ssh_private_key_file: /opt/ips/oracle.pvt
+        ssh-extra-args: "-o StrictHostKeyChecking=no"
+    tomcat:
+      hosts:
+        18.222.120.236:
+        18.216.11.71:
+      vars:
+        ansible_user: tomcat
+        ansible_ssh_private_key_file: /opt/ips/tomcat.pvt
+        ssh-extra-args: "-o StrictHostKeyChecking=no"
+
+
+
+

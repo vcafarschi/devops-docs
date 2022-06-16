@@ -1,0 +1,15 @@
+[frontend]
+18.188.53.32
+
+[frontend:vars]
+http_port=8080
+
+[backend]
+18.188.53.31
+
+[web:children]
+frontend
+backend
+
+[web:vars]
+http_port=80

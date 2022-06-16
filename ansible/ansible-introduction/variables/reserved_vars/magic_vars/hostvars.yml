@@ -1,0 +1,31 @@
+---
+### The big trick is that you need to collect the facts for all the hosts/groups you're interested in
+- hosts: database
+  gather_facts: true
+  tasks:
+    - include_vars:
+        file: database_extra_vars.yml
+
+    - name: "Retrieve hostvars"
+      debug:
+        msg: "{{ hostvars }}"
+
+- hosts: webapp
+  gather_facts: true
+  tasks:
+    - name: "Retrieve the database facts + vars"
+      debug:
+        msg: "{{ hostvars[groups['database'][0]] }}"
+
+    - name: "Retrieve the database certain var"
+      debug:
+        msg: "{{ hostvars[groups['database'][0]]['database_type'] }}"
+
+    - name: "Retrieve the database fact as using CMD -m setup"
+      debug:
+        msg: "{{ hostvars[groups['database'][0]]['ansible_default_ipv4']['address'] }}"
+
+    - name: "Retrieve the database fact as using playbook ansible_facts"
+      debug:
+        msg: "{{ hostvars[groups['database'][0]]['ansible_facts']['default_ipv4']['address'] }}"
+

@@ -1,0 +1,199 @@
+---
+- hosts: localhost
+  gather_facts: false
+  vars:
+    company_1: ENDAVA
+    company_2: google
+    variable: false
+    objects: ["math","music","bio"]
+    vlad:
+      age: 21
+      gender: "male"
+      hight: "1m"
+    fruits:
+      - fruit: apple
+        color: red
+      - fruit: pear
+        color: yellow
+      - fruit: grapefruit
+        color: yellow
+    users:
+      - name: alice
+        authorized:
+          - /tmp/alice/onekey.pub
+          - /tmp/alice/twokey.pub
+        groups:
+          - wheel
+          - docker
+#      - name: bob
+#        authorized:
+#          - /tmp/bob/id_rsa.pub
+#        groups:
+#          - docker
+  tasks:
+#    - block:
+#        - name: "Print the value of company variable"
+#          debug:
+#            msg: "{{ company_1 }}"
+#
+#        - name: "Print the value of company2 variable"
+#          debug:
+#            msg: "{{ company_2 }}"
+#
+#        - name: "get inverse representation of a value"
+#          debug:
+#            msg: "{{ company_1 | reverse }}"
+#
+#        - name: "Return the first item of a sequence, list"
+#          debug:
+#            msg: "{{ objects | first }}"
+#
+#        - name: "Return the last item of a sequence, list"
+#          debug:
+#            msg: "{{ objects | last }}"
+#
+        - name: "Convert a value to lowercase"
+          debug:
+            msg: "{{ company_1 | lower }}"
+#
+#        - name: "Capitalize a value. The first character will be uppercase, all others lowercase"
+#          debug:
+#            msg: "{{ company_1 | capitalize }}"
+#
+        - name: "Convert a value to uppercase"
+          debug:
+            msg: "{{ company_2 | upper }}"
+#
+
+    - name: "Used to specify a default value if a variable is undefined or is false(i.e. it doesn't exist or is empty)"
+      debug:
+        msg: "{{  var | default('') }}"
+#
+#    - name: "Return a string which is the concatenation of the strings in the sequence"
+#      debug:
+#        msg: "{{ objects | join }}"
+#
+#    - name: "The separator between elements is an empty string per default, you can define it with the optional parameter"
+#      debug:
+#        msg: "{{ objects | join(',') }}"
+
+
+#    - name: "Transforms a dictionary into a list of items suitable for looping."
+#      debug:
+#        msg: "{{ item }}" # or "{{ item.key }}" or "{{ item.value }}"
+#      loop: "{{ vlad | dict2items }}"
+#
+#    - name: "Transforms a dictionary into a list of items suitable for looping."
+#      debug:
+#        msg: "{{ item }}"
+#      loop : "{{ vlad | dict2items(key_name='file', value_name='path') }}"
+#
+#    - name: "Transform a list into a dictionary, mapping the content into key: value pairs"
+#      debug:
+#        msg: "{{ fruits | items2dict(key_name='fruit', value_name='color') }}"
+#
+#    - name: "Create a dictionary from 2 lists"
+#      debug:
+#        msg: "{{ dict(['vlad','lena'] | zip(['devops','developer','test'])) }}"
+#
+#    - name: Give me list combo of two lists
+#      debug:
+#        msg: "{{ ['vlad','lena','jane'] | zip(['devops','development','testers','automation','nft']) | list }}"
+#
+
+#    - name: "Produces a product of an object and the subelement values of that object"
+#      debug:
+#        msg: "{{ item[0].name }} , uses key {{ item[1] }}"
+#      loop: "{{ users | subelements('authorized') }}"
+
+# Managing file names and path names
+#    - name: Return the last name of a file path
+#      debug:
+#        msg: "{{ '/opt/httpd/conf' | basename }}"
+#
+#    - name: Return the directory from a path
+#      debug:
+#        msg: "{{ '/opt/httpd/conf' | dirname }}"
+
+# Searching strings with regular expressions
+
+- hosts: webapp
+  connection: local
+  gather_facts: false
+  vars:
+    names:
+      - first: Paul
+        last: Thompson
+      - first: Rod
+        last: Johnson
+    vl1: true
+    conns:
+      - id: "1"
+        zname: "vl"
+        site_1:
+          name: "101"
+          mqhost: "{{ hostvars[inventory_hostname]['groups']['webapp_1'] | join(' ') }}"
+          port: 111
+        site_2:
+          name: "102"
+          mqhost: "{{ hostvars[inventory_hostname]['groups']['webapp_2'] | join(' ') }}"
+          port: 222
+      - id: "2"
+        zname: "ad"
+        site_1:
+          name: "103"
+          mqhost: "{{ hostvars[inventory_hostname]['groups']['webapp_1'] | join(' ') }}"
+          port: 333
+        site_2:
+          name: "104"
+          mqhost: "{{ hostvars[inventory_hostname]['groups']['webapp_2'] | join(' ') }}"
+          port: 444
+  tasks:
+    - debug:
+        msg: "{{ item }}"
+      loop: "{{ conns | map(attribute='site_1') | list }}"
+
+    - debug:
+        msg: "{{ hostvars[inventory_hostname] }}"
+
+    - debug:
+        msg: "{{ hostvars[inventory_hostname]['groups']['webapp_1']  }}" ## returns an element as a  list
+
+    - debug:
+        msg: "{{ hostvars[inventory_hostname]['groups']['webapp_1'] | join(' ')  }}" ## return an element as a string
+
+    - debug: ## It will run only on site_1.mqhost
+        msg: "{{ item }}"
+      loop: "{{ conns | selectattr('site_1.mqhost', 'equalto', inventory_hostname) | list }}"
+
+    - debug:
+        msg: "{{ item }}"
+      loop: "{{ conns | selectattr('zname', 'equalto', 'vl') | list }}"
+
+
+    # Looks up an attribute
+    # Applies a filter on a sequence(list) of objects
+#    - name: Mapping on an attribute
+#      debug:
+#        msg: "{{ names | map(attribute='first') | list }}"
+#
+#    - name: You can let it invoke a filter by passing the name of the filter and the arguments afterwards
+#      debug:
+#        msg: "{{ names | map('upper') | list }}"
+#
+#    - debug:
+#        msg: "{{ names | map(attribute='last') | map('upper') | list }}"
+#
+#    - debug:
+#        msg: "{{ names | join(',') }}"
+
+#    - debug:
+#        msg: "{{ 'Hello world' | replace(' ', '') }}"
+#
+#    - debug:
+#        msg: "{{ 'aaaaargh' | replace('a', 'vlad ' , 2) }}"
+#
+#    - debug:
+#        msg: "hello"
+#      when: vl1 | bool == true
+

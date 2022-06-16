@@ -1,0 +1,20 @@
+---
+###################################################
+# include vars files that were created dynamically
+###################################################
+- hosts: webapp
+  gather_facts: false
+  tasks:
+    - name: "Create a file with variables"
+      command: "{{ playbook_dir }}/create_var_file.sh"
+
+    - name: "Include dynamic external vars"
+      include_vars: dynamic_external_vars.yml
+
+    - name: "Debug vars"
+      debug:
+        msg: "{{ lb_ip }} {{ lb_port }}"
+
+
+
+

@@ -1,0 +1,19 @@
+---
+##### Prerequisite #####
+# Utility rsync must be installed on both the local and remote host
+# For the synchronize module, the “localhost”/control machine is the host the synchronize task originates on, and the “destination host”
+# is the host synchronize is connecting to
+# mode Specifies the direction of the synchronization.
+# In push mode the localhost or delegate is the source.
+# In pull mode the remote host in context is the source.
+
+- name: Synchronization of src on the control machine(where you run ansible) to dest on the remote hosts.
+  synchronize:
+    src: /home/vcafarschi/JenkinsInstall.sh
+    dest: /home/ec2-user/
+
+- name: Synchronization of dest(remote) with src(control machine)
+  synchronize:
+    src: /home/ec2-user/vlad
+    dest: /home/vcafarschi
+    mode: pull

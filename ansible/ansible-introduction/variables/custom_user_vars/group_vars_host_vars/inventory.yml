@@ -1,0 +1,16 @@
+---
+all:
+  children:
+    tomcat:
+      children:
+        app_1:
+          hosts:
+            example1.com:
+            example2.com:
+        app_2:
+          hosts:
+            example4.com:
+            example5.com:
+    load_balancer:
+      hosts:
+        lb_1.com:

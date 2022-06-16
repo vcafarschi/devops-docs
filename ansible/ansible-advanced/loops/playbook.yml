@@ -1,0 +1,28 @@
+---
+- hosts: webapp
+  gather_facts: no
+  tasks:
+    - name: loop over a list
+      debug:
+        msg: "Copy file {{ item }} to remote"
+      loop:
+        - file1
+        - file2
+        - file3
+
+    - name: loop over a list of hashes
+      debug:
+        msg: "{{ item.name }} is {{ item.job }} with index {{ my_index }}"
+      loop:
+        - { name: Alice, job: Developer}
+        - { name: tabutha, job: Devops }
+      loop_control:
+        index_var: my_index
+
+    - name: loop over a nested lists
+      debug:
+        msg: "{{ item[0] }} is {{ item[1] }}"
+      with_nested:
+        - ['Vlad','Eugen']
+        - ['devops','developer','pm']
+

@@ -1,0 +1,60 @@
+---
+- hosts: one_host
+  gather_facts: false
+  tasks:
+    - name: task_1
+      debug:
+        msg: task_1
+
+    - name: task_2
+      debug:
+        msg: task_2
+
+    - name: task_3
+      debug:
+        msg: task_
+
+#    - name: Show differences between dynamic and static
+#      block:
+#        - name: "All import* statements are pre-processed at the time playbooks are parsed"
+#          import_role:
+#            name: import_vs_include
+#            tasks_from: broken.yml
+
+#    - name: "All include* statements are processed as they encountered during the execution of the playbook"
+#      include_role:
+#        name: import_vs_include
+#        tasks_from: broken.yml
+
+    - name: Show when usage
+      block:
+        - name: "import_role task applied the when: clause to the task inside the role, so the output only showed the task inside the role that was skipped"
+          import_role:
+            name: import_vs_include
+          when: true
+
+        - name: "include_role task itself was skipped because the when: clause is applied to the include_role task itself"
+          include_role:
+            name: import_vs_include
+          when: true
+
+#
+#    - name: Show tag usage
+#      block:
+#        - name: "When using tags with import_role, the tags are applied to all the tasks inside the role and not to the import_role task itself."
+#          import_role:
+#            name: import_vs_include
+#          tags:
+#            - install
+#
+#        - name: "When using tags with include_role, the tags are applied only to the include_task itself - not the tasks inside the role!"
+#          include_role:
+#            name: import_vs_include
+#          tags:
+#            - install
+
+
+
+
+
+

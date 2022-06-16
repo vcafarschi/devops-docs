@@ -1,0 +1,20 @@
+---
+#################################
+# include vars files using a loop
+#################################
+- hosts: webapp
+  gather_facts: false
+  tasks:
+    - name: "Include external vars using loop"
+      include_vars: "{{ item }}"
+      loop:
+        - vars/external_vars.yml
+        - vars/default_vars.yml
+
+    - name: "Debug vars"
+      debug:
+        msg: "{{ tomcat_version }} {{ tomcat_port }} {{ app_dir }} {{ user }} {{ group }}"
+
+
+
+

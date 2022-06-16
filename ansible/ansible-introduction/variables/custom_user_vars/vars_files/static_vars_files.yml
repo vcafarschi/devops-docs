@@ -1,0 +1,12 @@
+---
+- hosts: webapp
+  gather_facts: false
+  vars_files:
+    - vars/stage_vars.yml
+  tasks:
+    - name: Debug tomcat vars
+      debug:
+        msg: "{{ tomcat_version }} {{ tomcat_port }} {{ app_dir }}"
+
+
+

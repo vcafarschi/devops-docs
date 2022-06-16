@@ -1,0 +1,40 @@
+---
+- hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Ensure group "artifactory" exists
+      group:
+        name: artifactory
+        state: present
+
+    - name: Create artifactory user
+      user:
+        name: artifactory
+        group: artifactory
+
+    - name: Install openjdk
+      yum:
+        name: java-1.8*
+        state: present
+
+    - name: Download artifactory.zip
+      vars:
+        artifactory_url: "https://jfrog.bintray.com/artifactory/jfrog-artifactory-oss-6.9.6.zip"
+      get_url:
+        url: "{{ url }}"
+        dest: /tmp
+
+    - name: Unzip artifactory.tar.gz
+      unarchive:
+        src: /tmp/jfrog-artifactory-oss-6.9.6.zip
+        dest: /opt
+        owner: artifactory
+        group: artifactory
+        remote_src: true
+
+    - name: Start Artifactory
+      command: /opt/artifactory-oss-6.9.6/bin/artifactory.sh start
+      become_user: artifactory
+      become: true
+

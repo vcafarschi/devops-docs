@@ -1,0 +1,12 @@
+---
+- name: Add hosts to inventory
+  vars:
+    hosts:
+      - name: 54.146.99.239
+        groups:
+          - webapp
+  add_host:
+    name: "{{ item.name }}"
+    groups: "{{ item.groups }}"
+  loop: "{{ hosts }}"
+  delegate_to: localhost

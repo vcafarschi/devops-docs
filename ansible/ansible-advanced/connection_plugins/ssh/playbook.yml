@@ -1,0 +1,24 @@
+---
+- name: "Connects to remote servers using SSH connection plugin"
+  hosts: webapp
+  gather_facts: false
+  tasks:
+    - name: Check ansible_connection
+      debug:
+        var: ansible_connection
+
+    - name: Create directory
+      file:
+        path: "/tmp/ansible_speed"
+        state: directory
+
+    - name: Create file
+      copy:
+        content: SPEED
+        dest: "/tmp/ansible_speed/speed"
+
+    - name: Remove directory
+      file:
+        path: "/tmp/ansible_speed"
+        state: absent
+

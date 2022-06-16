@@ -1,0 +1,7 @@
+---
+filter_version: '1.0'
+module_blacklist:
+  # Deprecated – to be removed in 2.11
+  - sf_account_manager
+  # We only allow pip, not easy_install
+  - easy_install

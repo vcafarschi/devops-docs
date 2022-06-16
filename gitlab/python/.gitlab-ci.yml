@@ -1,0 +1,74 @@
+include:
+  - project: vcafarschi/shared-templates
+    file: python.yml
+
+
+stages:
+  - init
+  - test
+  - build
+  - deploy_dev
+  - deploy_stage
+  - deploy_prod
+
+
+install_requirements:
+  stage: init
+  image: python:3.8-slim-buster
+  extends:
+    - .python_cache:pull_push
+  before_script:
+    - rm -rf *
+    - !reference [.python_create_venv, before_script]
+    - !reference [.python_activate_venv, before_script]
+    - apt-get update -y
+    - apt-get install git -y
+    - apt-get install build-essential -y 
+    # - git clone https://github.com/keras-team/keras.git
+    # - cd keras
+    - git clone https://github.com/pandas-dev/pandas.git
+    - cd pandas
+  script:
+    - pip install .
+    - pip install -r requirements-dev.txt
+
+unittest:
+  stage: test
+  image: python:3.8-slim-buster
+  extends:
+    - .python_cache:pull_push
+    - .python:unittest
+
+
+
+run_unit_tests:
+  stage: test
+  image:
+    name: python:3.8-slim-buster
+  extends: 
+    - .python_cache:pull_push
+  before_script:
+    - !reference [.python_activate_venv, before_script]
+  script:
+    - python -m unittest discover # run unit tests
+    # - coverage run -m unittest discover -t. -s test/unit
+    # - coverage xml -o coverage/coverage.unit.xml
+    # - rm -f -- coverage/.coverage
+
+run_coverage:
+  stage: test
+  image:
+    name: python:3.7.9-slim-buster
+  extends: .python_cache:pull_push
+  script:
+    - ls -al 
+    - source venv/bin/activate
+    - python -m coverage run --source ${COVERAGE_TARGET:=${CI_PROJECT_NAME//-/_}} -m unittest discover # run unit tests
+    - python -m coverage report # shows coverage
+    - python -m coverage xml -o coverage-${CI_JOB_NAME}.xml
+    - ls -al
+
+
+.build_image_dev:
+  stage: build
+

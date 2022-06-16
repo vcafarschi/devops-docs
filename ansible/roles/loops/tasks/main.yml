@@ -1,0 +1,23 @@
+---
+#- name: loop over a list using with_items
+#  debug:
+#    msg: "{{ item }}"
+#  with_items:
+#    - 1
+#    - [2,3]
+#    - 4
+#
+#- name: loop over a list using loop
+#  debug:
+#    msg: "{{ item }}"
+#  loop: "{{ [1, [2,3] ,4] | flatten(1) }}"
+#
+#- name: loop over a list
+#  debug:
+#    msg: "{{ item }}"
+#  loop: "{{ names }}"
+
+
+
+
+

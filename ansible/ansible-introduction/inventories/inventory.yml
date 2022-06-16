@@ -1,0 +1,24 @@
+---
+all:
+  children:
+    one_host:
+      hosts:
+        3.138.172.50:
+    two_hosts:
+      hosts:
+        3.138.172.50:
+        3.137.185.117:
+    webapp:
+      hosts:
+        3.137.185.117:
+    database:
+      hosts:
+        3.137.185.117:
+    proxy:
+      hosts:
+        3.137.185.117:
+
+
+
+
+

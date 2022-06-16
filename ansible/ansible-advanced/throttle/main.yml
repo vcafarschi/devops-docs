@@ -1,0 +1,14 @@
+---
+- hosts: six_hosts
+  gather_facts: false
+  tasks:
+    - name: Simple task
+      command: sleep 1
+
+    - name: CPU intensive task
+      command: sleep 3
+      throttle: 1
+
+    - name: Simple task
+      command: sleep 1
+

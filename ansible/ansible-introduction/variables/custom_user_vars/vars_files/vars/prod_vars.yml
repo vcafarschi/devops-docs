@@ -1,0 +1,5 @@
+---
+tomcat_version: 8.5.47
+tomcat_port: 443
+app_dir: tslapps
+

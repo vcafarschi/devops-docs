@@ -1,0 +1,19 @@
+---
+all:
+  children:
+    webapp:
+      hosts:
+        18.222.120.236:
+      vars:
+        app_port: 8080
+        protocol: "tcp"
+        ssl_enabled: true
+    database:
+      hosts:
+        3.133.155.134:
+      vars:
+        database_type: "oracle"
+        database_port: 1521
+        database_sid: "oradb.private"
+
+

@@ -1,0 +1,63 @@
+---
+- name: "Run database play"
+  hosts: database
+  gather_facts: false
+  become: true
+  tasks:
+    - name: "Download MySql rpm"
+      get_url:
+        url: "https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm"
+        dest: /tmp/
+        mode: 0644
+
+    - name: "Install MySql rpm"
+      yum:
+        name: "/tmp/mysql80-community-release-el7-3.noarch.rpm"
+        state: present
+      become: true
+
+    - name: "Install MySql server"
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - MySQL-python
+        - mysql-server
+
+    - name: "Start service MySql"
+      systemd:
+        state: started
+        name: mysqld
+
+    - name: "Register mysql pass"
+      shell: "grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}'"
+      register: mysql_tmp_pass
+
+    - name: "Ensure MySQL database is present"
+      mysql_db:
+        name: "petclinic"
+        login_user: root
+        login_password: "6HBfsh+I6d=z"
+        collation: "utf8_general_ci"
+        encoding: "utf8"
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqlx.sock
+        login_port: 33060
+
+#- name: "Run webapp play"
+#  hosts: webapp
+#  tasks:
+#    - name: "Install tomcat"
+#      yum:
+#        name: tomcat
+#        state: installed
+#
+#    - name: "Copy .war into webapps"
+#      copy:
+#        src: server-0.0.1-SNAPSHOT.jar
+#        dest:
+#
+#
+#- name: "Run load_balancer play"
+#  hosts: load_balancer
+#  tasks:

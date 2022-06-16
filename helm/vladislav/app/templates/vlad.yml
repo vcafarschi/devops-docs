@@ -1,0 +1,8 @@
+---
+# Source: app/templates/vlad.yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: RELEASE-NAME-configmap
+data:
+  myvalue: "Hello World"

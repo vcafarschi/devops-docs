@@ -1,0 +1,23 @@
+---
+- hosts: one_host
+  gather_facts: false
+  become: true
+  vars:
+    rescue: true
+    always: false
+    both: false
+  tasks:
+    - include_role:
+        name: block
+        tasks_from: rescue.yml
+      when: rescue | bool == true
+
+    - include_role:
+        name: block
+        tasks_from: always.yml
+      when: always | bool == true
+
+    - include_role:
+        name: block
+        tasks_from: always_and_rescue.yml
+      when: both | bool == true

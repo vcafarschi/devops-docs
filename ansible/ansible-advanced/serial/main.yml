@@ -1,0 +1,10 @@
+---
+- hosts: six_hosts
+  gather_facts: false
+  serial: 1
+  tasks:
+    - name: task_1
+      command: sleep 1
+
+    - name: task_2
+      command: sleep 1

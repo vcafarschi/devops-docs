@@ -1,0 +1,10 @@
+---
+- hosts: six_hosts
+  gather_facts: false
+  tasks:
+    - name: task_1
+      command: sleep 3
+
+    - name: task_2
+      command: sleep 3
+

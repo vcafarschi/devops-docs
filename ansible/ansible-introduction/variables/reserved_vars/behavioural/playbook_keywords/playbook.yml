@@ -1,0 +1,16 @@
+---
+- hosts: webapp
+  tasks:
+    - name: Install tomcat
+      yum:
+        name: tomcat
+        state: present
+
+- hosts: database
+  remote_user: oracle
+  tasks:
+    - name: Install database
+      yum:
+        name: postgresql-server
+        state: present
+

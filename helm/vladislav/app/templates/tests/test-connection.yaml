@@ -1,0 +1,21 @@
+---
+# Source: app/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "RELEASE-NAME-app-test-connection"
+  labels:
+    app.kubernetes.io/name: app
+    helm.sh/chart: app-0.1.0
+    app.kubernetes.io/instance: RELEASE-NAME
+    app.kubernetes.io/version: "1.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['RELEASE-NAME-app:80']
+  restartPolicy: Never

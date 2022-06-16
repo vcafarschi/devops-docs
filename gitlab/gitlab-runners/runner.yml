@@ -1,0 +1,4 @@
+- hosts: gitlab-runners
+  become: true
+  roles:
+    - ansible-gitlab-runner

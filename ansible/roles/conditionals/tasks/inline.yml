@@ -1,0 +1,19 @@
+---
+vars:
+  mtls_enabled: true
+  keystore_pass: "keystore_pass"
+  truststore_pass: "truststore_pass"
+  basic: "basic_tomcat_java_opts "
+  mtls: "{{ truststore_pass }} {{ keystore_pass }} "
+  tomcat: "{{ 'some string ' + basic + mtls if (mtls_enabled==true and vlad > 1) else basic }}"
+  ternary_1: "{{ mtls_enabled | ternary('some string ' + basic + mtls, basic) }}"
+
+- debug:
+    var: basic
+
+- debug:
+    var: tomcat
+
+- debug:
+    var: ternary_1
+

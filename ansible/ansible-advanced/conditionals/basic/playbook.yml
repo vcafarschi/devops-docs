@@ -1,0 +1,31 @@
+---
+- hosts: webapp
+  gather_facts: true
+  tasks:
+    - name: "Conditionals based on ansible_facts"
+      debug:
+        msg: "Distribution is Amazon"
+      when: ansible_facts['distribution'] == "Vlad"
+
+    - name: "Using when with multiple conditions"
+      debug:
+        msg: "Distribution is Amazon AND os family is RedHat"
+      when: ansible_facts['distribution'] == "Amazon" and ansible_facts['os_family'] == "RedHat"
+
+    - name: "Using when with multiple conditions"
+      debug:
+        msg: "Distribution is Amazon AND os family is RedHat"
+      when:
+        - ansible_facts['distribution'] == "Amazon"
+        - ansible_facts['os_family'] == "RedHat"
+
+    - name: "Using when with multiple conditions"
+      debug:
+        msg: "Distribution is vlad OR os family is RedHat"
+      when: ansible_facts['distribution'] == "vlad" or ansible_facts['os_family'] == "RedHat"
+
+    - name: "Using when with multiple conditions"
+      debug:
+        msg: "Distribution is Amazon AND os family is RedHat or Distribution is Debian and distribution_major_version is 7"
+      when: (ansible_facts['distribution'] == "Amazon" and ansible_facts['os_family'] == "RedHat") or
+            (ansible_facts['distribution'] == "Debian" and ansible_facts['distribution_major_version'] == "7")

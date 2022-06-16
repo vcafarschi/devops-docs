@@ -1,0 +1,49 @@
+---
+# map Works with lists
+- name: map
+  vars:
+    users:
+      - name: "Vlad"
+        age: 23
+        hobbies:
+          - "gym"
+          - "ping-pong"
+        sibling:
+          name: "Arina"
+          age: 10
+  debug:
+    msg: "{{ users | map(attribute='sibling') | list }}"
+
+
+
+- name: site_1
+  vars:
+    connections:
+      - id: "1"
+        name: "vl"
+        site_1:
+          name: 101
+          mqhost: 18.212.68.112
+          port: 111
+        site_2:
+          name: 102
+          mqhost: 54.163.46.237
+          port: 222
+      - id: "2"
+        name: "ad"
+        site_1:
+          name: 104
+          mqhost: 18.212.68.112
+          port: 333
+        site_2:
+          name: 104
+          mqhost: 54.163.46.237
+          port: 444
+  debug:
+    msg: "{{ conns | map(attribute='site_1') | selectattr('mqhost', 'equalto', inventory_hostname) | list  }}"
+
+- name: site_2
+  debug:
+    msg: "{{ item }}"
+  loop: "{{ conns | map(attribute='site_2') | selectattr('mqhost', 'equalto', inventory_hostname) | list }}"
+

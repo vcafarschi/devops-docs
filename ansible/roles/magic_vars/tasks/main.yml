@@ -1,0 +1,30 @@
+---
+- name: The full path of used Ansible configuration file
+  debug:
+    var: ansible_config_file
+
+- name: List of groups the current host is part of
+  debug:
+    var: group_names
+
+- name: A dictionary/map with all the groups in inventory and each group has the list of hosts that belong to it
+  debug:
+    var: groups
+
+- name: A dictionary/ map of data related to your remote systems, including operating systems, IP addresses, attached filesystems, and more
+  debug:
+    var: ansible_facts
+
+- name: A dictionary/map with all the hosts in inventory and variables assigned to them
+  debug:
+    var: hostvars
+
+- name: A dictionary/map with all the hosts in inventory and variables assigned to them
+  debug:
+    var: inventory_hostname
+
+- name: A dictionary/map with all the hosts in inventory and variables assigned to them
+  debug:
+    var: inventory_hostname_short
+
+

@@ -1,0 +1,29 @@
+---
+- hosts: one_host
+  gather_facts: true
+  tasks:
+    - name: Show ansible_facts
+      debug:
+        var: ansible_facts
+
+    - name: Show CPU architecture
+      debug:
+        msg: "{{ ansible_facts['architecture'] }}"
+
+    - name: Show ip address
+      debug:
+        msg: "{{ ansible_facts['default_ipv4']['address'] }}"
+
+    - name: Show memory details
+      debug:
+        msg: "{{ ansible_facts['memory_mb'] }}"
+
+    - name: Show memory Operation System family
+      debug:
+        msg: "{{ ansible_facts['os_family'] }}"
+
+
+
+
+
+

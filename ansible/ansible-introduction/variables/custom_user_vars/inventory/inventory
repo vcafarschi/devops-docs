@@ -1,0 +1,16 @@
+[webapp]
+18.222.120.236
+
+[webapp:vars]
+app_port=8080
+protocol="tcp"
+ssl_enabled=true
+
+[database]
+3.133.155.134
+
+[database:vars]
+database_type="oracle"
+database_port=1521
+database_sid="oradb.private"
+

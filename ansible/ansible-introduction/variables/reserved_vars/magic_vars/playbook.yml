@@ -1,0 +1,26 @@
+---
+- hosts: webapp
+  tasks:
+    - name: "The inventory name for the ‘current’ host being iterated over in the play"
+      debug:
+        var: inventory_hostname
+
+    - name: "List of groups the current host is part of"
+      debug:
+        var: group_names
+
+    - name: "A dictionary/map with all the groups in inventory and each group has the list of hosts that belong to it"
+      debug:
+        var: groups
+
+    - name: "Special variable that allows you to ‘omit’ an option in a task"
+      debug:
+        msg: "{{ unexistent_var | default(omit) }}"
+
+    - name: "The path to the directory of the playbook that was passed to the ansible-playbook command line"
+      debug:
+        msg: "{{ playbook_dir }}"
+
+    - name: "The path to the dir of the currently running role"
+      debug:
+        msg: "{{ role_path }}"

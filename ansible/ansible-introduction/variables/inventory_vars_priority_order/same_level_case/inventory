@@ -1,0 +1,13 @@
+[frontend]
+18.188.53.32
+
+[frontend:vars]
+http_port=8080
+
+[proxy]
+18.188.53.32
+
+[proxy:vars]
+http_port=80
+
+

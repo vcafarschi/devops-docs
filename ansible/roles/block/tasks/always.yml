@@ -1,0 +1,16 @@
+- name: Always do X
+  block:
+    - name: Print a message
+      debug:
+        msg: 'I execute normally'
+
+    - name: Force a failure
+      command: /bin/false
+
+    - name: Never print this
+      debug:
+        msg: 'I never execute :-('
+  always:
+    - name: Always do this
+      debug:
+        msg: "This always executes, :-)"

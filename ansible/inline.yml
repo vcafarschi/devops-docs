@@ -1,0 +1,18 @@
+---
+- hosts: all
+  connection: local
+  vars:
+    vlad:
+      name: vlad
+      age: 12
+#    lena:
+#      name: lena
+#      age: 14
+    mtls: "age={{ '12' if(vlad) '13' elif(lena) else '14' }} "
+
+  tasks:
+    - debug:
+        var: mtls
+
+
+

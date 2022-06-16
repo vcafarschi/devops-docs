@@ -1,0 +1,12 @@
+---
+all:
+  children:
+    web:
+      children:
+        frontend:
+          hosts:
+            18.188.53.32:
+          vars:
+            http_port: 8080
+      vars:
+        http_port: 80

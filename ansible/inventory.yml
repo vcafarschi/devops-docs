@@ -1,0 +1,12 @@
+---
+all:
+  children:
+    one_host:
+      hosts:
+        18.222.167.78:
+    two_host:
+      hosts:
+        52.14.88.251:
+        18.221.95.131:
+
+

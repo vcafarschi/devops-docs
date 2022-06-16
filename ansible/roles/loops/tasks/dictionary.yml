@@ -1,0 +1,40 @@
+---
+- name: "Transforms a dictionary into a list of items suitable for looping"
+  debug:
+    msg: "ITEM itself: {{ item }} "
+  loop: "{{ car | dict2items }}"
+# Makes from this
+#  car:
+#    name: mercedes
+#    color: white
+# this
+#  - key: name
+#    value: mercedes
+#  - key: color
+#    value: white
+#
+# How to check ?
+- name: "Check"
+  debug:
+    msg: "ITEM itself: {{ item }} "
+  loop:
+    - key: name
+      value: mercedes
+    - key: color
+      value: white
+
+
+#- name: "Transforms a dictionary into a list of items suitable for looping."
+#  debug:
+#    msg: "ITEM key: {{ item.key }}"
+#  loop: "{{ car | dict2items }}"
+#
+#- name: "Transforms a dictionary into a list of items suitable for looping."
+#  debug:
+#    msg: "ITEM value: {{ item.value }}"
+#  loop: "{{ car | dict2items }}"
+
+#- name: "Transforms a dictionary into a list of items suitable for looping."
+#  debug:
+#    msg: "{{ item }}"
+#  loop : "{{ vlad | dict2items(key_name='file', value_name='path') }}"

@@ -1,0 +1,21 @@
+---
+- hosts: frontend
+  gather_facts: false
+  tasks:
+    - name: Show http_port var
+      debug:
+        var: http_port
+
+- hosts: web
+  gather_facts: false
+  tasks:
+    - name: Show http_port var
+      debug:
+        var: http_port
+
+- hosts: backend
+  gather_facts: false
+  tasks:
+    - name: Show http_port var
+      debug:
+        var: http_port

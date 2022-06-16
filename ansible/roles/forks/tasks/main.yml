@@ -1,0 +1,6 @@
+---
+- name: task_1
+  command: sleep 1
+
+- name: task_2
+  command: sleep 1

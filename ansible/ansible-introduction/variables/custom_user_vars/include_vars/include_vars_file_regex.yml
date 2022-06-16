@@ -1,0 +1,19 @@
+---
+##########################################################################
+# include variables file within any directory based on regular expression
+###########################################################################
+- hosts: webapp
+  gather_facts: false
+  tasks:
+    - name: "Include external vars based on regex"
+      include_vars:
+        dir: vars
+        files_matching: "prod.*"
+
+    - name: "Debug vars"
+      debug:
+        msg: "{{ tomcat_version }} {{ tomcat_port }} {{ app_dir }}}"
+
+
+
+

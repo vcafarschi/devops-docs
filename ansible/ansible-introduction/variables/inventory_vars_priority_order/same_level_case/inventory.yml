@@ -1,0 +1,13 @@
+---
+all:
+  children:
+    frontend:
+      hosts:
+        18.188.53.32:
+          http_port: 8080
+    proxy:
+      hosts:
+        18.188.53.32:
+          http_port: 80
+
+

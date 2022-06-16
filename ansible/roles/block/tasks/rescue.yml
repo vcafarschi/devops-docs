@@ -1,0 +1,17 @@
+---
+- name: Handle the error
+  block:
+    - name: Print a message
+      debug:
+        msg: 'I execute normally'
+
+    - name: Force a failure
+      command: /bin/false
+
+    - name: Never print this
+      debug:
+        msg: 'I never execute, due to the above task failing, :-('
+  rescue:
+    - name: Print when errors
+      debug:
+        msg: 'I caught an error, can do stuff here to fix it, :-)'

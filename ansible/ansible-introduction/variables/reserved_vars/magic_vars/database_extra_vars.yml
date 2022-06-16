@@ -1,0 +1,7 @@
+---
+database_type: "oracle"
+database_domain: "private"
+database_name: "oradb"
+database_port: 1521
+
+db_user_name: vlad

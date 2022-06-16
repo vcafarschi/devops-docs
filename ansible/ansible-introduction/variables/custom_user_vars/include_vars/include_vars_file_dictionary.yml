@@ -1,0 +1,15 @@
+---
+###############################################################
+# read a file and put all those variables in a named dictionary
+###############################################################
+- hosts: webapp
+  gather_facts: false
+  tasks:
+    - name: "Include external vars into dictionary"
+      include_vars:
+        file: vars/external_vars.yml
+        name: webapp
+
+    - name: "Debug vars"
+      debug:
+        msg: "{{ webapp.tomcat_version }} {{ webapp.tomcat_port }} {{ webapp.app_dir }}"

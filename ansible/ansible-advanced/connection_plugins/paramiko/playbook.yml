@@ -1,0 +1,25 @@
+---
+- name: "Connects to Linux Enterprise Servers using paramiko connection plugin as PLAY VARIABLE"
+  hosts: el6
+  gather_facts: false
+  connection: paramiko
+  tasks:
+    - name: Check ansible_connection
+      debug:
+        var: ansible_connection
+
+    - name: Create directory
+      file:
+        path: "/tmp/ansible_speed"
+        state: directory
+
+    - name: Create file
+      copy:
+        content: SPEED
+        dest: "/tmp/ansible_speed/speed"
+
+    - name: Remove directory
+      file:
+        path: "/tmp/ansible_speed"
+        state: absent
+

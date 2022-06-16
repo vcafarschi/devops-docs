@@ -1,0 +1,10 @@
+---
+- hosts: one_host
+  gather_facts: false
+  tasks:
+#    - include_role:
+#        name: "loops"
+#        tasks_from: "dictionary.yml"
+
+    - debug:
+        msg:

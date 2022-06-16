@@ -1,0 +1,7 @@
+---
+all:
+  children:
+    el6:
+      hosts:
+        3.138.172.50:
+

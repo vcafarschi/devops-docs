@@ -1,0 +1,19 @@
+---
+- hosts: one_host
+  gather_facts: false
+  connection: local
+#  vars:
+#    var1: ""
+  tasks:
+    - debug:
+        msg: "Vlad is {{ var1 | default('', true) }}"
+
+  - name: Include vars of stuff.yaml into the 'stuff' var
+    include_vars:
+      file: stuff.yaml
+      name: stuff
+
+  - name: Bare include (free-form)
+    include_vars: myvars.yaml
+
+

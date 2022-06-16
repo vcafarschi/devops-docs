@@ -1,0 +1,22 @@
+---
+###################################################
+# include variables file based on certain criteria
+###################################################
+- hosts: webapp
+  gather_facts: false
+  vars:
+    tomcat_version: 9.0
+    tomcat_port: 8090
+    app_dir: webapps
+  tasks:
+    - name: "Include prod vars"
+      include_vars: vars/prod_vars.yml
+      when: env_type == 'prod'
+
+    - name: "Debug vars"
+      debug:
+        msg: "{{ tomcat_version }} {{ tomcat_port }} {{ app_dir }}"
+
+
+
+

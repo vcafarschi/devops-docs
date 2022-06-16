@@ -1,0 +1,14 @@
+---
+- hosts: frontend
+  gather_facts: false
+  tasks:
+    - name: Show http_port var
+      debug:
+        msg: " Hello {{ http_port }}"
+
+- hosts: proxy
+  gather_facts: false
+  tasks:
+    - name: Show http_port var
+      debug:
+        var: http_port

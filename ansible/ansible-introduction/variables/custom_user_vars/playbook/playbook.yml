@@ -1,0 +1,18 @@
+---
+- hosts: webapp
+  become: true
+  vars:
+    tomcat_url: "https://downloads.apache.org/tomcat/tomcat-8/v8.5.66/bin/apache-tomcat-8.5.66.tar.gz"
+    tomcat_name: "apache-tomcat"
+    tomcat_version: 8.5.66
+
+  tasks:
+    - name: Download tomcat archive
+      get_url:
+        url: "{{ tomcat_url }}"
+        dest: "/tmp/{{ tomcat_name }}-{{ tomcat_version }}.tar.gz"
+        mode: 644
+
+
+
+

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="15aada6b-4778-449d-bd3e-4ae0b3982fcc" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="projectConfigVersion" value="2" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.3.4\plugins\maven\lib\maven3" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1rYnUBY96nVJNU1qIGeWd9usbPq" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="sortByType" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/project" />
+    <property name="project.structure.last.edited" value="Global Libraries" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="\\wsl$\Ubuntu-20.04\home\vcafarschi\ideaProjects\ansible-introduction\project" />
+      <recent name="\\wsl$\Ubuntu-20.04\home\vcafarschi\ideaProjects\ansible-introduction\variables\custom_user_vars\group_vars_host_vars\host_vars" />
+      <recent name="\\wsl$\Ubuntu-20.04\home\vcafarschi\ideaProjects\ansible-introduction\variables\custom_user_vars\group_vars_host_vars\group_vars" />
+      <recent name="\\wsl$\Ubuntu-20.04\home\vcafarschi\ideaProjects\ansible-introduction\variables\custom_user_vars\include_vars" />
+      <recent name="\\wsl$\Ubuntu-20.04\home\vcafarschi\ideaProjects\ansible-introduction\variables\variables_custom_user\include_vars" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="\\wsl$\Ubuntu-20.04\home\vcafarschi\ideaProjects\ansible-introduction\variables\custom_user_vars\include_vars\vars" />
+      <recent name="\\wsl$\Ubuntu-20.04\home\vcafarschi\ideaProjects\ansible-introduction\variables\variables_custom_user\vars_files\vars" />
+      <recent name="\\wsl$\Ubuntu-20.04\home\vcafarschi\ideaProjects\ansible-introduction\variables" />
+      <recent name="\\wsl$\Ubuntu-20.04\home\vcafarschi\ideaProjects\ansible-introduction" />
+      <recent name="\\wsl$\Ubuntu-20.04\home\vcafarschi\ideaProjects\ansible-introduction\variables\reserved\behavioural\inventory_connection_vars" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="15aada6b-4778-449d-bd3e-4ae0b3982fcc" name="Default Changelist" comment="" />
+      <created>1619161903755</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1619161903755</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.cfg" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="445" y="254" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1620403798813">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="564" y="-760" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.824/8.-1080.1920.1040@8.-1080.1920.1040" timestamp="1619176992054" />
+    <state x="445" y="254" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.824@0.0.1536.824" timestamp="1620403798813" />
+    <state x="499" y="158" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1621175225391">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="499" y="158" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1536.824@0.0.1536.824" timestamp="1621175225391" />
+    <state x="542" y="167" key="FileChooserDialogImpl" timestamp="1620745037566">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="542" y="167" key="FileChooserDialogImpl/0.0.1536.824/8.-1080.1920.1040@0.0.1536.824" timestamp="1619628493417" />
+    <state x="542" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1620745037566" />
+    <state x="267" y="82" key="SettingsEditor" timestamp="1620467312222">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="267" y="82" key="SettingsEditor/0.0.1536.824/8.-1080.1920.1040@0.0.1536.824" timestamp="1619518183422" />
+    <state x="491" y="-916" key="SettingsEditor/0.0.1536.824/8.-1080.1920.1040@8.-1080.1920.1040" timestamp="1619171797994" />
+    <state x="267" y="82" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1620467312222" />
+    <state x="-2" y="0" width="1538" height="824" key="find.popup" timestamp="1621191481465">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="-2" y="0" width="1538" height="824" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1621191481465" />
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1621185348766">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1621185348766" />
+  </component>
+</project>

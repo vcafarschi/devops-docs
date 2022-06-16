@@ -1,0 +1,20 @@
+---
+all:
+  children:
+    webapp:
+      hosts:
+        3.133.141.98:
+#        3.133.141.98:
+    database:
+      hosts:
+        3.15.25.216:
+    load_balancer:
+      hosts:
+        3.133.141.98:
+
+
+
+
+
+
+

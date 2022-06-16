@@ -1,0 +1,23 @@
+---
+- hosts: six_hosts
+  gather_facts: false
+  tasks:
+    - import_role:
+        name: forks
+      tags: forks
+
+- hosts: six_hosts
+  gather_facts: false
+  serial: 1
+  tasks:
+    - import_role:
+        name: serial
+      tags: serial
+
+- hosts: six_hosts
+  gather_facts: false
+  tasks:
+    - import_role:
+        name: throttle
+      tags: throttle
+
