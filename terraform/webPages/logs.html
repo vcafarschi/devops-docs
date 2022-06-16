@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body style="background-color:GhostWhite;">
+
+<h2 align="center">Terraform Logs</h2>
+
+<p>Terraform has detailed logs which can be enabled by setting the TF_LOG environment variable </p>
+<ul class="customText">
+    <li>TF_LOG=TRACE</li>
+    <li>TF_LOG=DEBUG</li>
+    <li>TF_LOG=INFO</li>
+    <li>TF_LOG=WARN</li>
+    <li>TF_LOG=ERROR</li>
+    <li>TF_LOG=JSON - outputs logs at the TRACE level or higher, and uses a parseable JSON encoding as the formatting.</li>
+</ul>
+
+<p class="customText">Logging can be enabled separately for:</p>
+<ul class="customText">
+    <li>Terraform Core using <strong>TF_LOG_CORE=smth</strong> environment variable</li>
+    <li>Terraform Providers through <strong>TF_LOG_PROVIDER=smth</strong> environment variable</li>
+</ul>
+
+<p class="customText">As well you can save the log in the separate file specified by <strong>TF_LOG_PATH</strong> environment variable</p>
+
+<p class="warning">WARNING !!! If terraform plan is running slowly, turn off trace-level logging and consider increasing parallelism (-parallelism=n).</p>
+</body>
+</html>

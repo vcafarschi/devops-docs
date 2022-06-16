@@ -1,0 +1,102 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.mycompany.app</groupId>
+  <artifactId>my-app</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.mycompany.vlad</groupId>
+      <artifactId>vlad-app</artifactId>
+      <version>2.0</version>
+    </dependency>
+
+  <distributionManagement>
+    <repository>
+      <id>releases</id>
+      <name>ip-172-31-7-189.ec2.internal-releases</name>
+      <url>http://3.236.191.161:8081/artifactory/ips</url>
+    </repository>
+
+      <snapshotRepository>
+        <id>snapshots</id>
+        <name>ip-172-31-1-153.ec2.internal-snapshots</name>
+        <url>http://18.233.100.80:8081/artifactory/test</url>
+      </snapshotRepository>
+  </distributionManagement>
+
+  <repositories>
+    <repository>
+      <name>Repository that allows downloading RELEASE dependencies</name>
+      <id>artifactory-releases</id>
+      <url>http://3.236.191.161:8081/artifactory/ips</url>
+      <layout>default</layout>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </releases>
+    </repository>
+
+    <repository>
+      <name>Repository that allows downloading SNAPSHOT dependencies</name>
+      <id>artifactory-snapshots</id>
+      <url>http://3.236.191.161:8081/artifactory/ips-dev</url>
+      <layout>default</layout>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </snapshots>
+    </repository>
+
+<!--    <repository>
+      <name>Repository that allows downloading SNAPSHOT and RELEASE dependencies</name>
+      <id>artifactory</id>
+      <url>http://3.236.191.161:8081/artifactory/ips-common</url>
+      <layout>default</layout>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </snapshots>
+    </repository>-->
+  </repositories>
+
+  <build>
+    <plugins>
+      <plugin>
+        <!-- Build an executable JAR -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.0.2</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>lib/</classpathPrefix>
+              <mainClass>com.mycompany.app.App</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

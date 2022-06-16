@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body style="background-color:GhostWhite;>
+
+<h2 align="center"></h1>
+
+<h1 align="center">Terraform State file</h1>
+
+<p class="definition">Terraform records information about what infrastructure it manages in a <b>terraform.tfstate</b> (<i>also known as <b>last-known state</b> file</i>)</p>
+
+<p class="warning"><strong>WARNING !!!</strong> do NOT manually edit or delete the terraform.tfstate file or Terraform will lose track of managed resources</p>
+
+<h2 align="center">terraform state list</h2>
+<li class="customText" >
+    <strong>List all of your resources in terraform.tfstate file</strong>
+</li>
+<pre class="codeCommand">terraform state <span class="blue">list</span></pre>
+
+<li class="customText">
+    <strong>List resources in the <span class="red">elb module</span></strong>
+</li>
+<pre class="codeCommand">terraform state <span class="blue">list</span> <span class="red">module.elb</span> </pre>
+
+<h2 align="center">terraform state show</h2>
+<li class="customText">
+    <strong>Print human-readable output of all resources from the state file</strong>
+</li>
+<pre class="codeCommand">terraform state <span class="blue">show</span></pre>
+
+<li class="customText">
+    <strong>Shows <span class="red">aws_vpc</span> resource named <span class="red">vpc-1</span></strong>
+</li>
+<pre class="codeCommand">terraform state <span class="blue">show</span> <span class="red">'aws_vpc.vpc-1'</span></pre>
+
+<li class="customText">
+    <strong>Shows <span class="red">aws_vpc</span> resource named <span class="red">vpc-2</span> inside a module named <span class="red">foo</span>:</strong>
+</li>
+<pre class="codeCommand">terraform state <span class="blue">show</span> <span class="red">'module.foo.aws_vpc.vpc-2'</span></pre>
+
+
+<h2 align="center">terraform state mv</h2>
+<p class="definition">By default Terraform will understand moving or renaming a resource configuration as a request to delete the old object and create a new object at the new address</p>
+
+<li class="customText">
+    <strong>Renamed a resource packet_device from worker to helper without deleting and re-creating it</strong>
+</li>
+<pre class="codeCommand">terraform state <span class="blue">mv</span> <span class="red">packet_device.worker packet_device.helper</span></pre>
+
+<li class="customText">
+    <strong>moved resource packet_device.worker block into a worker child module</strong>
+</li>
+<pre class="codeCommand">terraform state <span class="blue">mv</span> <span class="red">packet_device.worker module.worker.packet_device.worker</span></pre>
+
+<li class="customText">
+    <strong>moved resource packet_device.worker block into a worker child module and renamed it to main</strong>
+</li>
+<pre class="codeCommand">terraform state <span class="blue">mv</span> <span class="red">packet_device.worker module.worker.packet_device.main</span></pre>
+
+<li class="customText">
+    <strong>move a Module Into a module</strong>
+</li>
+<pre class="codeCommand">terraform state <span class="blue">mv</span> <span class="red">module.app module.parent.module.app</span></pre>
+
+<h2 align="center">terraform state rm</h2>
+<p class="definition">You can use terraform state rm when you wish to remove a binding to an existing remote object without destroying it, which will effectively make Terraform "forget" the object while it continues to exist in the remote system.</p>
+
+<li class="customText">
+    <strong>TF "forget" all of the instances of the packet_device resource named "worker"</strong>
+</li>
+<pre class="codeCommand">terraform state rm 'packet_device.worker'</pre>
+
+<li class="customText">
+    <strong>TF "forget" all of the instances of the packet_device resource named "worker" in a child module foo</strong>
+</li>
+<pre class="codeCommand">terraform state rm 'module.foo.packet_device.worker'</pre>
+
+<h2 align="center">terraform state pull</h2>
+<p class="definition">This command will download the state from its current location, upgrade the local copy to the latest state file version that is compatible with locally-installed Terraform, and output the raw format to stdout.
+    This is useful for reading values out of state (potentially pairing this command with something like jq). It is also useful if you need to make manual modifications to state.</p>
+
+<pre class="codeCommand">terraform state pull</pre>
+
+<h2 align="center">terraform state push</h2>
+<p class="definition">The terraform state push command is used to manually upload a local state file to remote state</p>
+<p class="warning">WARNING !!! This command should rarely be used. It is meant only as a utility in case manual intervention is necessary with the remote state</p>
+
+<li class="customText">
+    <strong>This command will push the state specified by PATH to the currently configured backend</strong>
+</li>
+<pre class="codeCommand">terraform state push ./path/to/terraform.tfstate</pre>
+
+
+</body>
+</html>

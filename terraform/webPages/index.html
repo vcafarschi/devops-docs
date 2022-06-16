@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Terraform</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body style="background-color:GhostWhite;">
+
+<h1 align="center">Terraform Architecture</h1>
+
+<div align="center">
+    <object type="image/svg+xml" data="images/terraform-architecture.svg"></object>
+</div>
+
+<ul class="customText">
+    <li>Core is a binary written in GO which:</li>
+    <ul>
+        <li>loads the config files (desired configuration)</li>
+        <li>loads the terraform.tfstate (last-known state)</li>
+        <li>builds the dependency graph</li>
+    </ul>
+    <li>Plugins are executable binaries</li>
+    <li>Upstream API are external services/APIs with which Terraform interacts</li>
+</ul>
+
+<h1 align="center">Terraform State file</h1>
+<p class="customText">Terraform records information about what infrastructure it created in a Terraform state file (also known as <b>last-known state file</b>)</p>
+
+<video width="500" height="500" class="VIDEOcenter" controls>
+    <source src="videos/tf-apply.mp4" type="video/mp4">
+</video>
+
+<ol class="customText">
+    <li>TF Core loads the desired configuration from disk.</li>
+    <li>TF Core loads the last-known state of resources.</li>
+    <li>TF Core begins a refresh operation (without modifying the last-known state file) which instructs TF Provider based on last-known state to perform a Read on all managed remote resource.</li>
+    <li>TF Provider returns the current (real-world ) state (which is just an in-memory .tfstate file) of resources to TF Core.</li>
+    <li>TF Core calculates the difference, if any, between the current state and desired configuration.</li>
+    <li>TF Core based on this difference shows the execution plan in the users terminal.</li>
+    <li>The user accepts the execution plan</li>
+    <li>Terraform Core instructs Terraform Provider Plugin to perform CRUD operations (Create, Update) to bring the current state to desired state.</li>
+    <li>AWS returns the current state of created resources (attributes)</li>
+    <li>After resources get created, Terraform Core saves the current state of every created resource in terraform.tfstate file which becomes the last-known state.</li>
+    <li>Terraform returns</li>
+</ol>
+
+
+<p><a href="backends.html">Backends</a></p>
+<p><a href="cli_config.html">CLI config</a></p>
+<p><a href="basic_commands.html">Basic commands</a></p>
+<p><a href="logs.html">LOGS</a></p>
+<p><a href="loops.html">LOOPS</a></a></p>
+<p><a href="resource_graphs.html">Graphs</a></p>
+<p><a href="statefile.html">Statefile</a></p>
+<p><a href="workspaces.html">Workspaces</a></p>
+
+</body>
+</html>

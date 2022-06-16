@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body style="background-color:GhostWhite;">
+
+<h2 align="center">LOOPS</h2>
+
+<p class="customText">Terraform offers several different looping constructs:</p>
+<ul class="customText">
+    <li><strong>count</strong> meta-argument, to loop over <strong>resources</strong>.</li>
+    <li><strong>for_each</strong> meta-argument, to loop over <strong>resources</strong> and <strong>inline blocks</strong> within a resource.</li>
+    <li><strong>for</strong> expression, to loop over <strong>lists and maps</strong>.</li>
+</ul>
+<br>
+
+<h2 align="center">count</h2>
+<h3 align="center">count examples</h3>
+
+<p class="customText">count has two limitations:</p>
+<ul class="customText">
+    <li>you can't use <strong>count</strong> within a resource to loop over <strong>inline blocks</strong>.</li>
+    <li> when you use count to create a list of resources, if you remove an item from the middle of the list,<br>
+        terraform will delete every resource after that item and then re-create those resources again from scratch.</li>
+</ul>
+<br>
+
+<h2 align="center">for_each</h2>
+<h3 align="center">for_each examples</h3>
+<p class="customText">The <strong>for_each</strong> meta-argument <strong>solves</strong> these <strong>limitations</strong> and allows you to:</p>
+<ul class="customText">
+    <li>loop over <strong>lists</strong>, <strong>sets</strong>, <strong>maps</strong> and <strong>objects</strong>.</li>
+    <li>create <strong>multiple copies</strong> of an entire resource</li>
+    <li>create <strong>multiple copies</strong> of an <strong>inline block</strong> within a resource</li>
+    <li><strong>remove</strong> items <strong>from</strong> the <strong>middle</strong> of a collection <strong>safely</strong></li>
+</ul>
+<br>
+
+<h2 align="center">for_each on resources</h2>
+<ul class="customText">
+    <li>The <strong>for_each</strong> meta-argument accepts a <strong>map</strong> or a <strong>set of strings</strong>.</li>
+    <li>However, you can use <strong>list</strong>, but should <strong>convert</strong> it <strong>to set</strong> using toset()</li>
+    <li><strong>The keys of the map or values of a set of strings must be known values before apply</strong>.</li>
+</ul>
+<br>
+
+<h2 align="center">for_each on inline blocks</h2>
+<br>
+
+<h2 align="center">for</h2>
+
+<p class="customText">For expression allows:</p>
+<ul class="customText">
+    <li>loop over a LIST or MAP</li>
+    <li>construct new collections from existing ones (list,maps)</li>
+</ul>
+
+<br>
+
+<p class="customText">The exact type of the output will depend on brackets the loop is surrounded by.</p>
+<ul class="customText">
+    <li>[] - returns a list.</li>
+    <li>{} - returns a map.</li>
+</ul>
+
+
+<li class="customText">Loop over a list and return a list:</li>
+<pre class="codeCommand">[for ITEM in LIST : transform(ITEM)]</pre>
+
+<li class="customText">Loop over a list and return a map:</li>
+<pre class="codeCommand">{for ITEM in LIST : transform(ITEM) => transform(ITEM)}</pre>
+
+<li class="customText">Loop over a map and return a list:</li>
+<pre class="codeCommand">[for KEY, VALUE in MAP : transform(KEY)transform(VALUE)]</pre>
+
+<li class="customText">Loop over a map and return a map :</li>
+<pre class="codeCommand">{for KEY, VALUE in MAP :transform(KEY)=> transform(VALUE)}</pre>
+
+<li class="customText">Loop over an list of objects and return a list:</li>
+<pre class="codeCommand">[for ITEM in LIST_OBJECTS : transform(ITEM)]</pre>
+
+<li class="customText">Loop over an list of objects and return a map:</li>
+<pre class="codeCommand">{for ITEM in LIST_OBJECTS :transform(ITEM)=> transform(ITEM)}</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

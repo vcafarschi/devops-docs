@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body style="background-color:GhostWhite;">
+
+<h2 align="center">terraform init</h2>
+<h2 align="center">ADD VIDEO</h2>
+<ol class="customText">
+    <li>initializes backend</li>
+    <li>install modules</li>
+    <li>install provider(s) plugins</li>
+</ol>
+
+<p>terraform init < arguments > </p>
+
+<ul class="customText">
+    <li>-input=false expect all necessary values to be provided by either configuration files or the command line.</li>
+    <li>-lock-timeout=<duration> override the time TF will wait to acquire a state lock. The default is 0s which causes immediate failure if the lock is already held.</li>
+    <li>-backend-config=... option can be used for partial backend configuration</li>
+    <li>-get=false skip child module installation</li>
+    <li>-get-plugins=false skip plugin installation.</li>
+    <li>-upgrade update all previously installed plugins to the newest version that complies with the configuration’s version constraints</li>
+    <li>is safe to run multiple times, to bring the working directory up to date with changes in the configuration</li>
+</ul>
+
+<h2 align="center">terraform plan</h2>
+<h2 align="center">ADD VIDEO</h2>
+
+<ol class="customText">
+    <li>The terraform plan command creates an execution plan</li>
+    <li>TF Core loads the desired configuration from disk.</li>
+    <li>TF Core loads the last-known state of resources from terraform.tfstate.</li>
+    <li>TF Core begins a refresh operation (without modifying the terraform.tfstate) which instructs TF Provider based on terraform.tfstate to perform a Read on all managed remote resource.</li>
+    <li>TF Provider returns the real-world state (which is just an in-memory .tfstate file) of resources to TF Core.</li>
+    <li>TF Core calculates the difference, if any, between the real-world state and desired configuration.</li>
+    <li>TF Core based on this difference shows the execution plan in the user’s terminal.</li>
+</ol>
+
+<p>terraform plan < arguments > </p>
+<ul class="customText">
+    <li>-var 'NAME=VALUE'  Sets a value for a single input variable</li>
+    <li>-var-file=/path/to/file  Sets values for many input variables from a file</li>
+    <li>-input=false expect all necessary values to be provided by either configuration files or the command line.</li>
+    <li>-lock-timeout=< duration > override the time TF will wait to acquire a state lock. The default is 0s which causes immediate failure if the lock is already held.</li>
+    <li>-out=FILENAME -Writes the generated plan to the given filename in an opaque file format that you can later pass to terraform apply to execute the planned changes</li>
+    <li>-parallelism=n  Limit the number of concurrent operation as Terraform walks the graph. Defaults to 10.</li>
+</ul>
+
+<h2 align="center">terraform apply</h2>
+<h2 align="center">ADD VIDEO</h2>
+<video autoplay muted>
+  <source src="videos/tf-apply.mp4" type="video/mp4">
+</video>
+
+<p>terraform apply < arguments > </p>
+<ol class="customText">
+    <li>The terraform plan command creates an execution plan</li>
+    <li>TF Core loads the desired configuration from disk.</li>
+    <li>TF Core loads the last-known state of resources from terraform.tfstate.</li>
+    <li>TF Core begins a refresh operation (without modifying the terraform.tfstate) which instructs TF Provider based on terraform.tfstate to perform a Read on all managed remote resource.</li>
+    <li>TF Provider returns the real-world state (which is just an in-memory .tfstate file) of resources to TF Core.</li>
+    <li>TF Core calculates the difference, if any, between the real-world state and desired configuration.</li>
+    <li>TF Core based on this difference shows the execution plan in the user’s terminal.</li>
+    <li>The user accepts the execution plan</li>
+    <li>TF Core instructs Terraform Provider Plugin to perform CRUD operations (Create, Update so on) to bring the real-world state to desired state.</li>
+    <li>AWS returns the real-world state of created resources to TF Core</li>
+    <li>Terraform Core saves the real-world state of every created resource in terraform.tfstate file which becomes the last-known state.</li>
+    <li>TF Core returns the result of apply to user’s terminal</li>
+</ol>
+
+<p>terraform validate</p>
+
+</body>
+</html>
+

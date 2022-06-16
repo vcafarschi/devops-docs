@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body style="background-color:GhostWhite;">
+
+<h2 align="center">Backends</h2>
+
+<p class="customText">backends are responsible for:</p>
+<ul class="customText">
+    <li>where state is stored.</li>
+    <li>where operations are performed.</li>
+</ul>
+
+<div align="center">
+    <object type="image/svg+xml" data="images/terraform-backends.svg"  width="55%"; height="55%";></object>
+</div>
+
+<p class="customText"><strong>Operations</strong> refers to API requests against infrastructure in order to create, read, update, or destroy resources</p>
+<p class="customText"><strong>Enhanced backends</strong> can both store state and perform operations.</p>
+<p class="customText"><strong>Standard backends</strong> only store state remotely and rely on the local backend for performing operations.</p>
+
+<p class="customText">local backend</p>
+<ul class="customText">
+    <li>stores state as a local file on disk (default backend)</li>
+    <li>performs API operations directly from the machine where the terraform command is run</li>
+</ul>
+
+<p class="customText">remote backend</p>
+<ul class="customText">
+    <li>can perform API operations remotely, using Terraform Cloud or Terraform Enterprise (Remote operations are optional for the remote backend)</li>
+    <li>if local operations are configured, Terraform uses the remote backend for state and the local backend for operations, like with the other state backends.</li>
+</ul>
+
+<p class="customText">S3 backend</p>
+<ul class="customText">
+    <li>stores state remotely in S3</li>
+    <li>rely on the local backend for performing operations.</li>
+</ul>
+<br>
+
+<h1 align="center" style="color: green">------------------------------------------------------------------</h1>
+
+<h2 align="center">Partial backend configuration</h2>
+
+<ul class="customText">
+    <li>You do not need to specify every required argument in the backend configuration.</li>
+    <li>Omitting certain arguments may be desirable if some arguments are provided automatically by an automation script running Terraform.</li>
+    <li>When some or all of the backends arguments are omitted, we call this a partial configuration.</li>
+</ul>
+
+<p class="customText">There are several ways to supply the remaining arguments</p>
+
+<li class="customText">
+    <strong>Take all the arguments from a file</strong>
+</li>
+<pre class="codeCommand">terraform init -backend-config=path/to/file/</pre>
+
+<li class="customText" >
+    <strong>Specify remaining arguments from CLI as key: value pairs</strong>
+</li>
+<pre class="codeCommand">terraform init \
+-backend-config="bucket=vcafarschi-terraform-backend" \
+-backend-config="key=global/terraform.tfstate" \
+-backend-config="dynamodb_table="terraform-locks"</pre>
+
+<p class="warning">WARNING !!! CLI options override the settings in the main configuration</p>
+
+<p class="customText">When using partial configuration, Terraform requires at minimum an empty backend configuration</p>
+<pre class="codeCommand">terraform {
+  backend "s3" {}
+}
+</pre>
+<br>
+
+<h1 align="center" style="color: green">------------------------------------------------------------------</h1>
+
+<h2 align="center">Changing backend configuration</h2>
+
+<p class="customText">You can change your backend configuration as well as the type of backend at any time.</p>
+<ul class="customText">
+    <li>Terraform will automatically detect any changes in your configuration and request a reinitialization.</li>
+    <li>During reinitialization Terraform will ask if you'd like to migrate your existing state to the new configuration.<br>
+        This allows you to easily switch from one backend to another.</li>
+    <li>If you're using multiple workspaces, Terraform can copy all workspaces to the destination backend.<br>
+        If Terraform detects multiple workspaces, it will ask if this is what you want to do.</li>
+    <li>If you're just reconfiguring the same backend, Terraform will still ask if you want to migrate your state.<br>
+        You can respond "no" in this scenario.</li>
+</ul>
+
+
+
+</body>
+</html>

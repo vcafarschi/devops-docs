@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Terraform</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body style="background-color:GhostWhite;">
+<h1 align="center">Resource Graphs</h1>
+<p class="customText">Terraform builds a dependency graph from the Terraform configurations and walks this graph to generate plans, refresh state, and more.</p>
+
+<li class="customText" >
+    <strong>To generate a visual representation of Configuration use this command</strong>
+</li>
+<pre class="codeCommand">terraform graph | dot -Tpng > graph.png</pre>
+
+<li class="customText" >
+    <strong>To generate a visual representation of Execution plan use this command</strong>
+</li>
+<pre class="codeCommand">terraform graph -type=plan | dot -Tpng > graph.png</pre>
+
+<p>The output is in the DOT format, which can be used by GraphViz to generate charts.</p>
+
+<img src="images/graphviz-graph.png" class="IMAGEcenter1">
+
+<p>You need to know the following about dependency graphs:</p>
+<ul class="customText">
+    <li>During an apply, the bottom nodes are evaluated first and the higher nodes are evaluated later.</li>
+    <li>Cyclical dependencies are not allowed.</li>
+    <li>Nodes with zero dependencies are created first and destroyed last</li>
+    <li>You cannot guarantee any ordering between nodes at the same dependency level.</li>
+</ul>
+
+<p class="definition" align="center"> <b>Blast radius </b> is another great tool of graph representation</p>
+<img src="images/blast-graph.jpg" class="IMAGEcenter2">
+
+</body>
+</html>

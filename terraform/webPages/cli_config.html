@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body style="background-color:GhostWhite;">
+
+<h2 align="center">CLI Configuration File</h2>
+
+<li class="customText">
+    <strong>Terraform CLI config file location for Linux</strong>
+</li>
+<pre class="codeCommand">${HOME}/.terraformrc</pre>
+
+<li class="customText">
+    <strong>The location of the Terraform CLI configuration file can also be specified using the environment variable</strong>
+</li>
+<pre class="codeCommand">export TF_CLI_CONFIG_FILE=/path/to/config</pre>
+<br>
+
+<h1 align="center" style="color: green">------------------------------------------------------------------</h1>
+
+<h2 align="center">Provider Plugins Installation</h2>
+
+<ul class="customText">
+    <li>By default Terraform downloads provider(s) plugins directly from TF public registry</li>
+    <li>Downloading a plugin directly from terraform public registry is not always appropriate.</li>
+    <li>For example, the origin registry is not accessible due to firewall restrictions.</li>
+</ul>
+
+
+<p>A <strong>provider_installation</strong> block in the CLI configuration overrides default installation behaviors</p>
+
+<pre class="codeCommand">
+## ${HOME}/.terraformrc
+<strong>provider_installation</strong> {
+
+    <strong>filesystem_mirror</strong> {
+      path    = "/opt/terraform/providers"
+      include = ["hashicorp/aws"]
+      exclude = ["hashicorp/local"]
+    }
+
+    <strong>direct</strong> {
+      exclude = ["hashicorp/aws/"]
+      include = ["hashicorp/local"]
+    }
+
+    <strong>network_mirror</strong> {
+      url = "https://abc.com"
+    }
+}
+</pre>
+
+<ul class="customText">
+    <li><strong>filesystem_mirror</strong> allows plugin providers to be downloaded from local filesystem specified by <strong>path</strong>
+        <ul>
+            <li><strong>path</strong> to provider plugin can be of 2 types:
+                <ul>
+                    <li><strong>packed (archived)</strong> provider plugin with the following directory structure:</li>
+                    <ul>
+                        <li><span class="partialCodeCommand">HOSTNAME/NAMESPACE/TYPE/terraform-provider-TYPE_VERSION_TARGET.zip</span> </li>
+                    </ul>
+                    <li><strong>unpacked (unarchived)</strong> provider plugin with the following directory structure:</li>
+                    <ul>
+                        <li><span class="partialCodeCommand">HOSTNAME/NAMESPACE/TYPE/VERSION/TARGET</span></li>
+                    </ul>
+                    <li><strong>Where</strong></li>
+                    <ul>
+                        <li><strong>HOSTNAME</strong> is registry.terraform.io </li>
+                        <li><strong>NAMESPACE</strong> is hashicorp</li>
+                        <li><strong>TYPE</strong> for example is aws</li>
+                        <li><strong>VERSION</strong> for example is 3.49.0</li>
+                        <li><strong>TARGET</strong> specifies particular target platform using a format like darwin_amd64, linux_arm, windows_amd64</li>
+                    </ul>
+                </ul>
+            </li>
+        </ul>
+        <ul></ul>
+        <ul></ul>
+    </li>
+    <br>
+    <li><strong>direct</strong> downloads plugin providers from terraform public registry <strong>https://releases.hashicorp.com/</strong></li>
+    <li><strong>network_mirror</strong> downloads plugin providers from an <strong>URL</strong></li>
+</ul>
+
+<p class="warning">WARNING !!! Don't configure <strong>network_mirror</strong> URLs that you do not trust </p>
+<br>
+
+<h1 align="center" style="color: green">------------------------------------------------------------------</h1>
+
+<h2 align="center">How to use <strong>filesystem_mirror</strong> with following providers configuration</h2>
+<pre class="codeCommand">
+required_providers {
+  aws = {
+    source  = "hashicorp/aws"
+    version = "= 3.49"
+  }
+}
+</pre>
+
+<ol>
+<h3 class="customText"><strong>Packed</strong> layout</h3>
+<li class="customText">Download provider plugin with the following command</li>
+<pre class="codeCommand">terraform providers mirror /opt/terraform/providers</pre>
+<p>It creates<strong> /opt/terraform/providers/registry.terraform.io/hashicorp/aws/terraform-provider-aws_3.49.0_linux_amd64.zip</strong></p>
+</ol>
+
+
+<ol>
+<h3 class="customText"><strong>UNpacked</strong> layout</h3>
+<li class="customText">Download provider plugin with the following command</li>
+<pre class="codeCommand">terraform providers mirror /opt/terraform/providers</pre>
+<p>It creates<strong> /opt/terraform/providers/registry.terraform.io/hashicorp/aws/terraform-provider-aws_3.49.0_linux_amd64.zip</strong></p>
+
+<li class="customText">Unzip the archive</li>
+<pre class="codeCommand">unzip /opt/terraform/providers/registry.terraform.io/hashicorp/aws/
+    terraform-provider-aws_3.49.0_linux_amd64.zip</pre>
+<p>It will unzip the following provider plugin binary <strong>terraform-provider-aws_v3.49.0_x5</strong></p>
+
+<li class="customText">Make directory based on Unpacked layout <strong>HOSTNAME/NAMESPACE/TYPE/VERSION/TARGET</strong></li>
+<pre class="codeCommand">mkdir -p /opt/terraform/providers/registry.terraform.io/hashicorp/aws/3.49.0/linux_amd64</pre>
+
+<li class="customText">Copy the provider plugin to recently created directory</li>
+<pre class="codeCommand">cp terraform-provider-aws_v3.49.0_x5 /opt/terraform/providers/registry.terraform.io/
+    hashicorp/aws/3.49.0/linux_amd64/</pre>
+</ol>
+<br>
+
+<h1 align="center" style="color: green">------------------------------------------------------------------</h1>
+
+<h2 align="center">Provider Plugin Cache</h2>
+<ul class="customText">
+    <li>By default, <strong>terraform init</strong> downloads plugins into <strong>.terraform</strong> directory of the working directory.</li>
+    <li>If you have multiple configurations that use the same provider then a separate copy of its plugin will be downloaded for each configuration.</li>
+    <li>Provider plugins can be quite large so the default behavior can be inconvenient for those with slow Internet connections.</li>
+    <li>Terraform allows to use a local directory as a shared plugin cache, which allows each distinct plugin binary to be downloaded only once.</li>
+    <li>If the selected plugin is not already in the cache, Terraform will download it into the cache first and then copy <br> it from there into the correct location under your current working directory.</li>
+</ul>
+
+<p class="warning">WARNING !!! Terraform will never itself delete a plugin from the plugin cache once it has been placed there. Over time, as plugins are upgraded, the cache directory may grow to contain several unused versions which you must delete manually</p>
+<br>
+
+
+<li class="customText">To enable the plugin cache, use the <strong>plugin_cache_dir</strong> setting in the CLI configuration file</li>
+<pre class="codeCommand">
+## ${HOME}/.terraformrc
+
+plugin_cache_dir = "$HOME/.terraform.d/plugin-cache"
+</pre>
+
+<p class="warning">WARNING !!! This directory must already exist before TF will cache plugins; Terraform will not create the directory itself. </p>
+
+<li class="customText">Alternatively, the <strong>TF_PLUGIN_CACHE_DIR</strong> environment variable can be used for plugin cache directory</li>
+<pre class="codeCommand">export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"</pre>
+
+
+</body>
+</html>
