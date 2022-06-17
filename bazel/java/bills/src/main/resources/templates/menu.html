@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="menu.css" media="screen">
+</head>
+<body>
+
+<div class="navbar">
+    <a href="#home">Acasă</a>
+    <div class="subnav">
+        <button class="subnavbtn">Utilizator <i class="fa fa-caret-down"></i></button>
+        <div class="subnav-content">
+            <button class="sub-button" onclick="document.getElementById('update_user_details').style.display='block'">Actualizare Date Personale</button>
+            <button class="sub-button" onclick="document.getElementById('change_notification').style.display='block'">Modificarea Notificări</button>
+            <button class="sub-button" onclick="document.getElementById('deactivate_user_form').style.display='block'">Deactivare Account</button>
+        </div>
+    </div>
+    <div class="subnav">
+        <button class="subnavbtn">Chitanță<i class="fa fa-caret-down"></i></button>
+        <div class="subnav-content">
+            <a href="#enquiry">Interogare Chitanță</a>
+            <a href="#pay">Achitare Chitanță</a>
+        </div>
+    </div>
+    <div class="subnav">
+        <button class="subnavbtn">Rapoarte <i class="fa fa-caret-down"></i></button>
+        <div class="subnav-content">
+            <a href="#enquiry">Generate Raport</a>
+            <a href="#enquiry">Descărcare Raport</a>
+        </div>
+    </div>
+    <a href="#contact">Contact</a>
+</div>
+
+<div id="update_user_details" class="update_user_details">
+    <div class="imgcontainer">
+        <span onclick="document.getElementById('update_user_details').style.display='none'" class="close" title="Close Modal">&times;</span>
+        <img src="avatar.png" alt="Avatar" class="avatar">
+    </div>
+    <div class="container">
+        <label><b>Nume</b></label>
+        <input type="text" placeholder="Introduceti nume nou" name="uname" required>
+        <label><b>Parola</b></label>
+        <input type="password" placeholder="Introduceti parola nouă" name="psw" required>
+        <label><b>Email</b></label>
+        <input type="text" placeholder="Introduceti email nou" name="email" required>
+        <button type="submit" class="submit-btn">Modifică</button>
+    </div>
+</div>
+
+<div id="change_notification" class="change_notification">
+    <div class="imgcontainer">
+        <span onclick="document.getElementById('change_notification').style.display='none'" class="close" title="Close Modal">&times;</span>
+        <img src="notification.png" alt="Avatar" class="avatar">
+    </div>
+    <div class="container">
+        <p><input onclick="myFunction()" type="checkbox" class="checkbox" value="email" id="email_check">Email</p>
+        <p><input onclick="myFunction()" type="checkbox" class="checkbox" value="phone" id="tel_check">Numar de telefon</p>
+        <div id="email" class="email">
+            <label><b>Nume</b></label>
+            <input type="text" placeholder="Introduceti email-ul nou" required>
+        </div>
+        <div id="tel" class="tel">
+            <label><b>Numar de telefon</b></label>
+            <input type="text" placeholder="Introduceti nr. de tel nou" required>
+        </div>
+        <button type="submit" class="submit-btn">Modifică</button>
+    </div>
+</div>
+
+<div id="deactivate_user_form" class="deactivate_user_form">
+    <div class="imgcontainer">
+        <span onclick="document.getElementById('deactivate_user_form').style.display='none'" class="close" title="Close Modal">&times;</span>
+        <img src="remove-user.png" alt="Avatar" class="avatar">
+    </div>
+    <div class="container">
+        <p class="alert">Atenție!</p>
+        <p>Acesta actiune este ireversibilă.</p>
+        <button type="submit" class="submit-btn">Șterge</button>
+    </div>
+</div>
+
+<script>
+    var menu = document.getElementById('navbar');
+    var update_user_details = document.getElementById('update_user_details');
+    var change_notification = document.getElementById('change_notification');
+    var deactivate_user_form = document.getElementById('deactivate_user_form');
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target === menu) {
+            update_user_details.style.display = "none";
+            change_notification.style.display = "none";
+            deactivate_user_form.style.display = "none";
+        }
+    }
+
+    function myFunction() {
+        var checkBox = document.getElementById("email_check");
+        var telBox = document.getElementById("tel_check");
+        var textEmail = document.getElementById("email");
+        var textTel = document.getElementById("tel");
+        if (checkBox.checked == true){
+            textEmail.style.display = "block";
+        } else {
+            textEmail.style.display = "none";
+        }
+        if (telBox.checked == true){
+            textTel.style.display = "block";
+        } else {
+            textTel.style.display = "none";
+        }
+    }
+
+</script>
+
+</body>
+</html>

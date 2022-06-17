@@ -1,0 +1,156 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+}
+
+.navbar {
+    overflow: hidden;
+    background-color: #333;
+}
+
+.navbar a , .sub-button{
+    float: left;
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.subnav {
+    float: left;
+    overflow: hidden;
+}
+
+.subnav .subnavbtn {
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+}
+
+.navbar a:hover, .subnav:hover .subnavbtn, .sub-button:hover {
+    background-color: #DB7093;
+}
+
+.subnav-content {
+    display: none;
+    position: absolute;
+    left: 0;
+    background-color: #DB7093;
+    width: 100%;
+    z-index: 1;
+}
+
+.subnav-content a , .sub-button{
+    background-color: #DB7093;
+    float: left;
+    color: white;
+    text-decoration: none;
+}
+
+.subnav-content a:hover , .sub-button:hover{
+    background-color: #eee;
+    /*color: black;*/
+}
+
+.subnav:hover .subnav-content {
+    display: block;
+}
+
+.update_user_details, .change_notification, .deactivate_user_form, .email, .tel{
+    display: none; /* Hidden by default */
+    margin-top: 80px; /* Same as the width of the sidenav */
+    font-size: 20px; /* Increased text to enable scrolling */
+    padding: 0px 10px;
+    width: 100%; /* Full width */
+    height: 50%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: #FFFFFF;
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+
+.imgcontainer, .avatar{
+    /*margin-left: 250px;*/
+    background-color: #FFFFFF;
+    text-align: center;
+    width: 35%;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    width:40%;
+}
+
+input[type=text], input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Add an active class to the active dropdown button */
+.active {
+    background-color: #DB7093;
+    color: white;
+}
+
+.submit-btn {
+    background-color: #DB7093;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.close {
+    position: absolute;
+    right: 550px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+    padding-top: 100px;
+}
+
+.close:hover,
+.close:focus {
+    color: red;
+    cursor: pointer;
+}
+
+
+.alert {
+    color: red;
+}
+
+.checkbox{
+    margin: 0 auto;
+   background-color: #eee;
+}
+
+p{
+    margin-left: 230px;
+    background-color: #FFFFFF;
+    text-align: center;
+    width: 40%;
+    border-radius: 50%;
+}

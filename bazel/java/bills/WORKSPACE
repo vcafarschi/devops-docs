@@ -1,0 +1,55 @@
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+RULES_JVM_EXTERNAL_TAG = "4.2"
+RULES_JVM_EXTERNAL_SHA = "cd1a77b7b02e8e008439ca76fd34f5b07aecb8c752961f9640dea15e9e5ba1ca"
+
+http_archive(
+    name = "rules_jvm_external",
+    strip_prefix = "rules_jvm_external-%s" % RULES_JVM_EXTERNAL_TAG,
+    sha256 = RULES_JVM_EXTERNAL_SHA,
+    url = "https://github.com/bazelbuild/rules_jvm_external/archive/%s.zip" % RULES_JVM_EXTERNAL_TAG,
+)
+
+load("@rules_jvm_external//:defs.bzl", "maven_install")
+
+maven_install(
+    artifacts = [
+        "junit:junit:4.12",
+        "org.springframework.boot:spring-boot-autoconfigure:2.4.2",
+        "org.springframework.boot:spring-boot:2.4.2",
+        "org.springframework.boot:spring-boot-starter-mail:2.4.2",
+        "org.springframework.boot:spring-boot-starter:2.4.2",
+        "org.springframework.boot:spring-boot-starter-test:2.4.2",
+        "javax.ws.rs:javax.ws.rs-api:2.1",
+        "org.springframework.boot:spring-boot-starter-web:2.4.2",
+        "org.springframework.boot:spring-boot-starter-thymeleaf:2.4.2",
+        "org.springframework.boot:spring-boot-starter-data-jpa:2.4.2",
+        "com.h2database:h2:1.4.200",
+        "org.springframework.data:spring-data-commons:2.4.2",
+        "org.junit.jupiter:junit-jupiter:5.7.0",
+        "org.springframework.bo  ot:spring-boot-devtools:2.4.2",
+        "org.springframework.boot:spring-boot-starter-validation:2.4.2",
+        "junit:junit:4.12",
+        "org.projectlombok:lombok:1.18.20",
+        "org.projectlombok:lombok-maven-plugin:1.18.20.0",
+        "org.postgresql:postgresql:42.2.18",
+        "com.sun.mail:javax.mail:1.6.0"
+    ],
+    fetch_sources = True, # What this option is responsible for ?
+    repositories = [
+        # Private repositories are supported through HTTP Basic auth
+        #"http://username:password@localhost:8081/artifactory/my-repository",
+        # "http://uk.maven.org/maven2",
+        # "https://jcenter.bintray.com/",
+        "https://maven.google.com",
+        "https://repo1.maven.org/maven2",
+    ],
+)
+
+# Transitive dependencies
+# Caching of external dependencies
+
+# bazel build //:java-maven --verbose_failures --strict_java_deps=off
+# --strict_java_deps=off ignores if transitive dependencies were not specified, by default fails if you haven't specified all transitive dependencies
+# add buildozer
+# bazel build --jvmopt="-server -Xms256m"

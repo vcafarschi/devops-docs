@@ -1,0 +1,23 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" media="screen">
+    <title>Sign Up</title>
+</head>
+
+<body>
+<div class="main">
+    <p class="sign" align="center">Înregistrare</p>
+    <form th:action="@{/signUp}" method="post" enctype="multipart/form-data">
+        <input class="un " type="text" name="userName" required minlength="10" maxlength="10" align="center" placeholder="Nume">
+        <input class="un " type="text" name="email"  required  minlength="20" maxlength="40" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"  align="center" placeholder="Email">
+        <input class="un " type="password" name="password" required minlength="10" maxlength="10"  align="center" placeholder="Parola">
+        <input class="un " type="password" name="confirmPassword" required minlength="10" maxlength="10"  align="center" placeholder="Confirma Parola">
+        <button class="submit" align="center" name="button1">Sign Up</button>
+    </form>
+</div>
+</body>
+</html>
