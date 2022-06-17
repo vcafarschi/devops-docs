@@ -43,11 +43,21 @@ data "aws_region" "current" {}
 ################################################################################
 # Random string to use as master password
 ################################################################################
-resource "random_password" "master_password" {
+resource "random_password" "db_aurora" {
   count = local.create_cluster && var.create_random_password ? 1 : 0
 
   length  = var.random_password_length
-  special = false
+  special = true
+  override_special = "_!%^" 
+}
+
+resource "aws_secretsmanager_secret" "db_master_password" {
+  name = var.db_password_name
+}
+
+resource "aws_secretsmanager_secret_version" "db_password" {
+  secret_id = aws_secretsmanager_secret.db_master_password.id
+  secret_string = random_password.db_aurora.result
 }
 
 resource "random_id" "snapshot_identifier" {

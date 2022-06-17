@@ -1,5 +1,5 @@
 provider "aws" {
-  profile = "endava"
+  profile = "some-profile"
   shared_credentials_file = "/home/vcafarschi/.aws/credentials"
   region = "us-east-2"
 }
