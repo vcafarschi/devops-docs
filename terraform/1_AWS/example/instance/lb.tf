@@ -1,7 +1,7 @@
 ################################################################################
 # Create Classic Load Balancer
 ################################################################################
-  resource "aws_elb" "classic-lb" {
+resource "aws_elb" "classic-lb" {
   name               = "vcafarschi-classic-lb"
   security_groups    = [aws_security_group.classic-lb.id]
 //  subnets            = [data.aws_subnet.pub-subnet.*.id] with square bracket the wildcard * doesnt work
