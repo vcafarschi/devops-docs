@@ -218,20 +218,6 @@
 4. **VeriSign** then create 2 Name Server Records on their TLD Name Server, which host the .**com** TLD zone
 
 
-## Routing traffic for subdomains
-- When you want to route traffic to your resources for a subdomain, such as **dev.vcafarschi.com** or **prod.vcafarschi.com**, you have two options:
-  - Create records in the hosted zone for the domain
-  - Create a hosted zone for the subdomain, and create records in the new hosted zone (This way you can easily delegate the responsibility of the new hosted zone to a different team or aws account)
-https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-routing-traffic-for-subdomains.html
-https://www.youtube.com/watch?v=Hgv0__itc8Q&ab_channel=TheCloudAdvisory
-dig trace
-
-## DNS delegation
-When you delegate multiple levels of subdomains in DNS, it is important to always delegate from the parent zone. For example, if you are delegating www.dept.example.com, you should do so from the dept.example.com zone, not from the example.com zone. Delegations from a grandparent to a child zone might not work at all or work only inconsistently- 
-
-https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/CreatingNewSubdomain.html
-https://www.youtube.com/watch?v=COaARRYXdts&ab_channel=MahendraPandey
-
 ## Key Features
 - Domain registration
 - Public and private DNS Service
@@ -268,16 +254,17 @@ STRIPES add image
 ## What if you accidently deleted the public hosted zone. 
 - Let's suppose you accidentely *deleted* the **vcafarschi.com** **Public Hosted Zone**.
 - After you Created *New* **Public Hosted Zone** with the same name **vcafarschi.com**, but your domain is not resolving to the records you put in the new hosted zone.
-
-- Use whoiz to check what NS are used or use dig NS <domain-name>
+  ![](images/pub-hosted-zone.png)
+- Use whoiz to check what NS are used or use dig NS domain-name
 - If you are using Route 53 as registrar, In the navigation pane, choose Registered Domains.
   - Choose the name of the domain for which you want to edit settings.
     ![](images/registered_domains.png)
-- Change the NS records to match the new ones from your Newly created public hosted zone
-  ![](images/pub-hosted-zone.png)
-https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-name-servers-glue-records.html#domain-name-servers-glue-records-adding-changing
+  - Name Servers from **Registered Domains** have to match with NS records from your Newly created public hosted zone.
+  - IN our case they are different, so we copy NS records from Public Hosted zone and insert them into **Registered Domain** Name Servers.
+    ![](images/registered_domains-updated.png)
 
- 
+
+
 ## How to use a domain in AWS Route53 if you purchased it in a different registrar ( for example GoDaddy)?
 
 ![](images/godaddy_to_route53.svg)
@@ -288,6 +275,22 @@ https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-name-servers-gl
 2.  To make Route 53 the DNS service for your domain, you replace the Name Servers on **Godaddy** with these four name servers.
       - This way Godaddy will communicate the new **Name Servers** to the **TLD** name server.
     -  So whenever a request comes for **vcafarschi.com**, the TLD server will return Route53 NS and not the Godaddy ones.
+
+
+## Routing traffic for subdomains
+- When you want to route traffic to your resources for a subdomain, such as **dev.vcafarschi.com** or **prod.vcafarschi.com**, you have two options:
+  - Create records in the hosted zone for the domain
+  - Create a hosted zone for the subdomain, and create records in the new hosted zone (This way you can easily delegate the responsibility of the new hosted zone to a different team or aws account)
+https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-routing-traffic-for-subdomains.html
+https://www.youtube.com/watch?v=Hgv0__itc8Q&ab_channel=TheCloudAdvisory
+dig trace
+
+## DNS delegation
+When you delegate multiple levels of subdomains in DNS, it is important to always delegate from the parent zone. For example, if you are delegating www.dept.example.com, you should do so from the dept.example.com zone, not from the example.com zone. Delegations from a grandparent to a child zone might not work at all or work only inconsistently- 
+
+https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/CreatingNewSubdomain.html
+https://www.youtube.com/watch?v=COaARRYXdts&ab_channel=MahendraPandey
+
 
 ## Private hosted zone
 - Should be associated with VPC's
