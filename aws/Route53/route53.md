@@ -5,7 +5,7 @@
 </table>
 
 ## How DNS works ?
-![](domain-resolution.svg)
+![](images/domain-resolution.svg)
 
 0. Let's assume we bought a domain name **vcafarschi.com**
 1. A user opens a web browser, enters **vcafarschi.com** in the address bar, and presses Enter.
@@ -22,16 +22,28 @@
 
 
 ## DNS Components
+- Zone file
 - There are 4 DNS servers involved in loading a webpage (DNS resolving)
   - DNS Resolver
   - Root Nameserver
   - Top Level Domain (**TLD**) Name Servers
   - Authoritative Name servers (NS) (The most important part when you buy a Domain name)
 
+
+### Zone file
+- A DNS zone file is a text file stored on **Name Servers**.
+- It **contains** all the **records** for every domain within that zone. (mappings between domain names and IP addresses)
+- It is mandatory for the zone file to have the TTL (Time to Live) listed before any other information. The TTL specifies how long a DNS record is in the server’s cache memory. 
+- The zone file can only list one record per line.
+- It will display the Start of Authority (SOA) record listed first. 
+- The SOA record contains essential domain name information including the primary authoritative name server for the DNS Zone.
+
+
 ### DNS Resolver
 - is a server designed to receive DNS queries from web browsers and other applications
 - for example resolver receives a query for **www.vcafarschi.com** and is responsible for tracking down the IP address for that hostname
 - resolver might be operated by the local network, an Internet Service Provider (ISP), a mobile carrier, a WIFI network, or other third party.
+
 
 ### Root Name Servers
 - Get the Root Name Servers
@@ -180,16 +192,6 @@
   ```
 
 
-## Zone file
-- A DNS zone file is a text file stored on **Name Servers** (Authoritative Name Server). 
-- It **contains** all the **records** for every domain within that zone. (mappings between domain names and IP addresses)
-- It is mandatory for the zone file to have the TTL (Time to Live) listed before any other information. The TTL specifies how long a DNS record is in the server’s cache memory. 
-- The zone file can only list one record per line.
-- It will display the Start of Authority (SOA) record listed first. 
-- The SOA record contains essential domain name information including the primary authoritative name server for the DNS Zone.
-
-
-
 ## What happens when you buy a Domain ?
 
 ### Registry
@@ -199,11 +201,12 @@
 
 ### Registrar
 - The registrar is an accredited organization, such as **GoDaddy**, **AWS Route53** which sells domain names to the public.
+
 ### Registrant
 - A registrant is the person or company that registers a domain name.
 - Registrants can manage their domain name settings through their registrar.
 
-![](domain-purchase-godaddy.svg)
+![](images/domain-purchase-godaddy.svg)
 
 0. Go to site **godaddy.com**
 1. Make a request to buy **vcafarschi.com** domain name at **GoDaddy** Registrar (Fill in Techincal details, Contact Info and pay Registration fee).
@@ -260,20 +263,26 @@ STRIPES add image
 - Check the health of your resources
 
 ## Domain registration in AWS Route 53
-![](domain-purchase-route53.svg)
+![](images/domain-purchase-route53.svg)
 
-### What if you purchased a domain and created a public hosted zone. Then you accidently deleted the public hosted zone. After you Created new public hosted zone with the same domain, but your domain is not using NEW Name servers from that Public Hosted Zone.
-- I recently purchased a new domain (stagesz.com) in AWS route53 and deleted the original hosted zone then created a new one and now when I check the ns records at a service like https://www.websitepulse.com/tools/ns-records-lookup-test# it shows a different group of records than what's listed in the route53 hosted zone.
+## What if you accidently deleted the public hosted zone. 
+- Let's suppose you accidentely *deleted* the **vcafarschi.com** **Public Hosted Zone**.
+- After you Created *New* **Public Hosted Zone** with the same name **vcafarschi.com**, but your domain is not resolving to the records you put in the new hosted zone.
 
-- Use whoiz yo check what NS are used or use nslookup -type=ns domain.com
-- If you are using Route 53 as registrar, then go to Registered Domains sections in Route 53 not just your hosted zone)
-- change the NS records from OLD ones to new ones from you Newly created public hosted zone
+using NEW Name servers from that Public Hosted Zone.
+- Use whoiz to check what NS are used
+  - or use dig NS <domain-name>
+- If you are using Route 53 as registrar, In the navigation pane, choose Registered Domains.
+- Choose the name of the domain for which you want to edit settings.
+  ![](images/registered_domains.png)
+
+- change the NS records from OLD ones to new ones from your Newly created public hosted zone
 https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-name-servers-glue-records.html#domain-name-servers-glue-records-adding-changing
 
-
+ 
 ## How to use a domain in AWS Route53 if you purchased it in a different registrar ( for example GoDaddy)?
 
-![](godaddy_to_route53.svg)
+![](images/godaddy_to_route53.svg)
 0. Let's assume you bought **vcafarschi.com** domain in **Godaddy** (or other Domain Registrars) and you want to make Route53 the DNS Service for this domain.
 1. Create a **Public hosted zone** that has the **same name as your domain**. It will tell Amazon Route 53 how you want to route traffic for your domain
     - When you create a hosted zone, Route 53 automatically creates a name server (NS) record and a start of authority (SOA) record for the zone. 
@@ -337,7 +346,7 @@ QUESTIONABLE, is it ? // TODO check hybrid DNS
   - Endpoint: health of specified resource
   - Calculated Health check : You can have 3 health-checks and then a calculated health-check status
   - CloudWatch alarm
-![]()
+![](images/)
 - you can do for private as well with some lambda
 - You can create an ALARM with SNS Notification when a Health checks fails so you get notified
 
@@ -384,7 +393,7 @@ USE CASE
 
 Geolocation vs Latency based
 
-![](img1.png)
+![](images/img1.png)
 
 # Multi layer routing policy
 
@@ -398,7 +407,7 @@ Geolocation vs Latency based
 
 
 
-![](img2.png)
+![](images/img2.png)
 
 - domain or subdomain that aws requested
 - date and time of the request
