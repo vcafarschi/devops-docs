@@ -1,7 +1,7 @@
 # DNS overview
 <table border="0">
  <tr>
-    <td><img src="dns-hierarcy.svg"></td>
+    <td><img src="images/dns-hierarcy.svg"></td>
 </table>
 
 ## How DNS works ?
@@ -269,14 +269,12 @@ STRIPES add image
 - Let's suppose you accidentely *deleted* the **vcafarschi.com** **Public Hosted Zone**.
 - After you Created *New* **Public Hosted Zone** with the same name **vcafarschi.com**, but your domain is not resolving to the records you put in the new hosted zone.
 
-using NEW Name servers from that Public Hosted Zone.
-- Use whoiz to check what NS are used
-  - or use dig NS <domain-name>
+- Use whoiz to check what NS are used or use dig NS <domain-name>
 - If you are using Route 53 as registrar, In the navigation pane, choose Registered Domains.
-- Choose the name of the domain for which you want to edit settings.
-  ![](images/registered_domains.png)
-
-- change the NS records from OLD ones to new ones from your Newly created public hosted zone
+  - Choose the name of the domain for which you want to edit settings.
+    ![](images/registered_domains.png)
+- Change the NS records to match the new ones from your Newly created public hosted zone
+  ![](images/pub-hosted-zone.png)
 https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-name-servers-glue-records.html#domain-name-servers-glue-records-adding-changing
 
  
