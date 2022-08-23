@@ -266,14 +266,17 @@ STRIPES add image
 
 
 ## How to use a domain in AWS Route53 if you purchased it in a different registrar ( for example GoDaddy)?
-
+### With other words you want to make Amazon Route 53 your DNS service
 ![](images/godaddy_to_route53.svg)
 0. Let's assume you bought **vcafarschi.com** domain in **Godaddy** (or other Domain Registrars) and you want to make Route53 the DNS Service for this domain.
 1. Create a **Public hosted zone** that has the **same name as your domain**. It will tell Amazon Route 53 how you want to route traffic for your domain
     - When you create a hosted zone, Route 53 automatically creates a name server (NS) record and a start of authority (SOA) record for the zone. 
     - The NS record identifies the four name servers that Route 53 associated with your hosted zone.
-2.  To make Route 53 the DNS service for your domain, you replace the Name Servers on **Godaddy** with these four name servers.
-      - This way Godaddy will communicate the new **Name Servers** to the **TLD** name server.
+2. Create records in the Public Hosted Zone created previously
+    - Import a zone file
+    - Or Create records individually in the console
+3. To make Route 53 the DNS service for your domain, you Update the Name Servers on **Godaddy** with these four name servers you got in step 1
+    - This way Godaddy will communicate the new **Name Servers** to the **TLD** name server.
     -  So whenever a request comes for **vcafarschi.com**, the TLD server will return Route53 NS and not the Godaddy ones.
 
 
@@ -283,7 +286,7 @@ STRIPES add image
   - Create a hosted zone for the subdomain, and create records in the new hosted zone (This way you can easily delegate the responsibility of the new hosted zone to a different team or aws account)
 https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-routing-traffic-for-subdomains.html
 https://www.youtube.com/watch?v=Hgv0__itc8Q&ab_channel=TheCloudAdvisory
-dig trace
+
 
 ## DNS delegation
 When you delegate multiple levels of subdomains in DNS, it is important to always delegate from the parent zone. For example, if you are delegating www.dept.example.com, you should do so from the dept.example.com zone, not from the example.com zone. Delegations from a grandparent to a child zone might not work at all or work only inconsistently- 
