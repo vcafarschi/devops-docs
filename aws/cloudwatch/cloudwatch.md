@@ -1,7 +1,33 @@
-# CloudWatch
-- Monitors AWS resources and any applications that is run on AWS in real time
-- Can be used to collect and track metrics
-- Can monitor the built-in metrics that come with AWS or your custom metrics.
+- [Cloudwatch Overview](#cloudwatch-overview)
+- [Concepts](#cloudwatch-concepts)
+  - [Namespaces](#namespaces)
+  - [Metrics]()
+    - [Metrics Time Stamps]()
+    - [Metrics Retention]()
+  - [Dimensions]()
+    - [Dimension Combinations]()
+  - [Resolution]()
+  - [Statistics]()
+  - [Units]()
+  - [Periods]()
+  - [Aggregation]()
+  - [Percentiles]()
+  - [Alarms]()
+
+
+# CloudWatch Overview
+![](images/cloudwatch-overview.svg)
+
+
+- CloudWatch is a **monitoring service** for **AWS resources** and **applications** you run on AWS in real time.
+- Can be used:
+  - to collect and track metrics (CPUUtilization)
+  - to collect and monitor log files
+  - create alarms
+- CloudWatch **alarms monitor metrics** and can be configured to **automatically initiate actions** when a threshold is breached.
+- CloudWatch can monitor:
+  - the **built-in metrics** that come with AWS (ex. CPUUtilization)
+  - or your **custom metrics** (AWS can't monitor DiskUtilization, so you can create this custom metric).
 - You can access CloudWatch using :
   - AWS CloudWatch console
   - AWS CLI
@@ -9,12 +35,12 @@
   - AWS SDK
 - VPC resources can connect to CloudWatch by creating a CloudWatch VPC Interface Endpoint
 
-Amazon CloudWatch is a metrics repository
-- Input to this repository can be:
-  - Out of the box metrics from the AWS services using CW
-  - Custom metrics based on custom data that you can decide
+- [AWS services that publish CloudWatch metrics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/aws-services-cloudwatch-metrics.html)
 
-# Namespaces
+Amazon CloudWatch is a metrics repository
+
+# CloudWatch Concepts
+## Namespaces
 - A namespace is a container for CloudWatch metrics
 - Metrics in different namespaces are isolated from each other
 - Metrics from different applications are not aggregated into same statistics
@@ -92,15 +118,14 @@ For examples:
 
 ## Alarms - Actions and Targets
 - When **action** is triggered by **alarm**?
-  - Alarms invoke actions 
-- What happends when alarm is triggered ?
-- An Alarm can do:
-  - EC2
-  - SNS
-  - CloudWatch event
-- IMPORTANT: CloudWatch alarms are very limited, they can do the above only actions.
-- IMPORTANT: CloudWatch **event** can invoke a lambda function based on CloudWatch **alarm** or an SQS queue.
-- This is very important for exam.
+  - **Alarms** invoke **actions** only for sustained state changes
+  - They do not invoke actions because they aer in a particular state
+  - The state must have changed and been maintained for a **specified number of periods**
+- What happens when alarm is triggered ?
+  - CloudWatch Alarms can do Auto Scaling, EC2, or SNS actions only.
+  - IMPORTANT: CloudWatch alarms are very limited, they can do the above only actions.
+  - IMPORTANT: ONLY CloudWatch **event** can invoke a lambda function (or an SQS queue) based on CloudWatch **alarm**.
+  - This is very important for exam.
 
 # CloudWatch Periods
 
