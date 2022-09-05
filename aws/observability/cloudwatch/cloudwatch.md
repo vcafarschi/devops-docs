@@ -6,21 +6,19 @@
   - [Metrics](#metrics)
     - [Metrics Time Stamps](#metric-time-stamps)
     - [Metrics Retention](#metric-retention)
-    - [High-Resolution Metrics](#high-resolution-metrics)
-  - [Dimensions]()
+    - [Metrics Resolution](#metrics-resolution)
+  - [Dimensions](#dimensions)
     - [Dimension Combinations]()
-  - [Resolution]()
-  - [Statistics]()
-  - [Units]()
-  - [Periods]()
-  - [Aggregation]()
-  - [Percentiles]()
-  - [Alarms]()
+  - [Statistics](#statistics)
+  - [Units](#units)
+  - [Periods](#periods)
+  - [Percentiles](#percentiles)
+  - [Alarms](#alarms)
 - [Pricing of AWS CloudWatch]()
+- [Cross-account cross-Region CloudWatch]()
 
 # CloudWatch Overview
 ![](images/cloudwatch-overview.svg)
-
 
 - CloudWatch is a **monitoring service** for **AWS resources** and **applications** you run on AWS in real time.
 - Can be used:
@@ -43,7 +41,7 @@
 # CloudWatch vs CloudTrail
 | CloudWatch                                              | CloudTrail                                                               |
 | --------------------------------------------------------| ------------------------------------------------------------------------ |
-| Performance monitoring                                  | Auditing                                                                 |
+| Performance monitoring                                  | Auditing (**Who** performed **what** actions and **when** on your resources)|
 | Log events across AWS Services – think operations       | Log API activity across AWS services – think activities, or who to blame |
 | Higher-level comprehensive monitoring and event service | More low-level, granular                                                 |
 | Log from multiple accounts                              | Log from multiple accounts                                               |
@@ -75,15 +73,20 @@
 - Data points themselves can come from any application or business activity from which you collect data.
 - AWS services send metrics to CloudWatch
   - You can send your own custom metrics to CloudWatch.
+- **Important note for EC2 metrics**: CloudWatch does not collect memory utilization and disk space usage metrics right from the get go. You need to install CloudWatch Agent in your instances first to retrieve these metrics.
 - **Metrics exist only in the region in which they are created, in other words**,
   - Metrics are completely separate between regions.
 - **Metrics are uniquely defined by a name, a namespace, and zero or more dimensions.**
 - You can retrieve **statistics** about those **datapoints** as an ordered set of time-series data
   - Statistics example: average CPU utilization across 5 EC2
+- **Metric** math enables you to query multiple CloudWatch metrics and use math expressions to create new time series based on these metrics.
+
+
 ## Metric Time Stamps
 - Each metric data point must be associated with a time stamp
   - Each metric data point must be marked with a time stamp.
   - If you do not provide a time stamp, Cloud Watch creates time stamp for you based on time the data point was recieved
+
 
 ## Metric Retention
 - **Metrics cannot be deleted**, but they automatically **expire after 15 month**s if no new data is published to them.
@@ -95,13 +98,13 @@
     - Data points older than 15 months expire on a rolling basis; as new data points come in, data older than 15 months is dropped.
   - Data points that are initially published with a shorter period are aggregated together for long-term storage.
 
-For examples:
+For example:
 - If you collect data using a prediod of 1 minute, the data remains available for 15 days with 1 minute resolution
   - After 15 days this data will still be avaialable, but this is agregated and is retrievable only with a resolution of 5 minutes
   - After 63 days, the data is further agregated ans is avaialbe with resolution of 1 hours
 - CloudWatch started retaining 5-minute and 1-hour metric data
 
-## High-Resolution Metrics
+## Metrics Resolution
 - Each metric is one of the following:
   -**Standard resolution**, with data having a one-minute granularity 
   -**High resolution**, with data at a granularity of one second
@@ -112,6 +115,95 @@ For examples:
 - Keep in mind that every PutMetricData call for a custom metric is charged, so calling PutMetricData more often on a high-resolution metric can lead to higher charges
 - If you set an alarm on a high-resolution metric, you can specify a high-resolution alarm with a period of 10 seconds or 30 seconds, or you can set a regular alarm with a period of any multiple of 60 seconds.
 - There is a higher charge for high-resolution alarms with a period of 10 or 30 seconds.
+
+
+# Dimensions
+- Represents a **name/value pair** that uniquely identifies a metric
+- You can assign up to 10 dimensions to a metric.
+- Whenever you add a unique dimension to one of your metrics, you are creating a new variation of that metric.
+- Example EC2 metric dimensions:
+  - InstanceId
+  - InstanceType
+  - ImageId
+- Examples ELB metric dimensions:
+  - AvailabilityZone]
+- With **put-metric-data**, you specify each dimension as **MyName=MyValue**
+- With **get-metric-statistics** or **put-metric-alarm** you use the format **Name=MyName, Value=MyValue**
+- For example, the following command publishes a Buffers metric with two dimensions named InstanceId and InstanceType.
+  ```bash
+  aws cloudwatch put-metric-data  \
+      –metric-name Buffers –namespace MyNameSpace \
+      –unit Bytes –value 231434333 \
+      –dimensions InstanceId=1-23456789, InstanceType=m1.small
+  ```
+- This command retrieves statistics for that same metric. Separate the Name and Value parts of a single dimension with commas, but if you have multiple dimensions, use a space between one dimension and the next.
+  ```bash
+  aws cloudwatch get-metric-statistics \
+    –metric-name Buffers –namespace MyNameSpace \
+    –dimensions Name=InstanceId, Value=1-23456789 Name=InstanceType, Value=m1.small \
+    –start-time 2016-10-15T04:00:00Z –end-time 2016-10-19T07:00:00Z \
+    –statistics Average –period 60
+  ```
+- If a single metric includes multiple dimensions, you must specify a value for every defined dimension when you use get-metric-statistics.
+    - For example, the Amazon S3 metric **BucketSizeBytes** includes the **dimensions** *BucketName* and *StorageType*, so you must specify both dimensions with get-metric-statistics.
+    ```
+    aws cloudwatch get-metric-statistics \
+    –metric-name BucketSizeBytes \
+    –start-time 2017-01-23T14:23:00Z –end-time 2017-01-26T19:30:00Z \
+    –period 3600 \
+    –namespace AWS/S3 \
+    –statistics Maximum \
+    –dimensions Name=BucketName,Value=MyBucketName Name=StorageType,Value=StandardStorage \
+    –output table
+    ```
+
+# Statistics
+- Statistics are metric data aggregations over specified periods of time.
+- CloudWatch provides statistics based on the **metric data points** provided by your **custom data** or provided by **other AWS services** to CloudWatch
+- Aggregations are made using the namespace, metric name, dimensions, and the data point unit of measure, within the time period you specify.
+
+| Statistic   | Description                                                                                                                               |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Minimum     | The lowest value observed during the specified period. You can use this value to determine low volumes of activity for your application   |
+| Maximum     | The highest value observed during the specified period. You can use this value to determine high volumes of activity for your application |
+| Sum         | All values submitted for the matching metric added together. This statistic can be useful for determining the total volume of a metric    |
+| Average     | The value Sum/SampleCount during the specific period. By comparing this statistic with the Minimum and Maximum you can determine the full scope of a metric and how close the average is to the Minimum and Maximum. This comparison helps you know when to increase or decrease your resources as needed |
+| SampleCount | The count (number) of data points used for the statistical calculation.                                                                   |
+| pNN.NN      | The value of the specified percentile. You can specify and percentile using up to two decimal places (e.. p45.45). Percentile statistics are not available for metric that include negative values. For more information see Percentiles |
+
+## Units
+- Each statistic has a **unit of measure**
+  - Example units include Bytes, Seconds, Count, and Percent
+- Metric data points that specify a unit of measure are aggregated separately
+- You can specify a unit when you create a custom metric. 
+- If you do not specify a unit, CloudWatch uses None as the unit.
+
+
+## Periods
+- A period is the length of time associated with a specific CloudWatch statistic. 
+  - The default value is 60 seconds.
+- CloudWatch aggregates statistics according to the period length that you specify when retrieving statistics.
+- For large datasets, you can insert a pre-aggregated dataset called a statistic set.
+
+
+## Percentiles
+- A percentile indicates the relative standing of a value in a dataset. 
+- For example, the 95th percentile means that 95 percent of the data is lower than this value and 5 percent of the data is higher than this value
+- **Percentiles are often used to isolate anomalies.**
+- 
+- Some CloudWatch metrics support percentiles as a statistic
+  - For these metrics, you can monitor your system and applications using percentiles as you would when using the other CloudWatch statistics (Average, Minimum, Maximum, and Sum)
+  - The following AWS services include metrics that support percentile statistics.
+    - API Gateway
+    - Application Load Balancer
+    - Amazon EC2
+    - Elastic Load Balancing
+    - Kinesis
+    - Amazon RDS 
+- Percentile statistics are available for custom metrics as long as you publish the raw, unsummarized data points for your custom metric
+  - Percentile statistics are not available for metrics when any of the metric values are negative numbers
+
+
 
 # Alarms
 - A CloudWatch alarm can be created to watch a **single CloudWatch metric** or the result of a **math expression** based on CloudWatch metrics.
@@ -149,17 +241,7 @@ For examples:
   - IMPORTANT: ONLY CloudWatch **event** can invoke a lambda function (or an SQS queue) based on CloudWatch **alarm**.
   - This is very important for exam.
 
-# CloudWatch Periods
 
-# Dimensions
-- Represents a name:value paird that uniquely identifies a metric
-- Example EC2 metric dimensions:
-  - InstanceId
-  - InstanceType
-  - ImageId
-- Examples ELB metric dimensions:
-  - AvailabilityZone
-  - LoadBalancerName
 
 # Logging terminology
   - Log Event: the activity being reported
@@ -217,3 +299,5 @@ For examples:
   - You need to pay $0.027 for every 1 million log events/month that matches the rule.
 - **Charges as per Canary Runs**
   - You will be charged $0.0017 for every canary run that you execute over AWS CloudWatch.
+
+# Cross-account cross-Region CloudWatch

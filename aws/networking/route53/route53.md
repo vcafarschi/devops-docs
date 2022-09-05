@@ -337,7 +337,7 @@ QUESTIONABLE, is it ? // TODO check hybrid DNS
 - How Name Servers are chosen ?
  - No more than 2 name servers are overlapping (Shuffle-sharding)
 
-## Anycast
+
 
 ## R53 Health checks
 - Let you track the health status of your resources
@@ -434,3 +434,27 @@ Geolocation vs Latency based
 - Limit 10.000 QPS per ENI
 
 ## R53 Resolver Outbound Endpoints
+
+
+
+## Anycast DNS
+- One of AWS goals at Amazon Route 53 is to provide low-latency DNS resolution to customers.
+- This is implemented by using “anycast” IP addresse from over 50 edge locations around the globe.
+- Anycast works by routing packets to the closest (network-wise) location that is “advertising” a particular address
+- In the image below, we can see that there are three locations, all of which can receive traffic for the 205.251.194.72 address
+
+  ![](images/route53-anycat-ips.png)
+
+- For example, if a customer has ns-584.awsdns-09.net assigned as a nameserver, issuing a query to that nameserver could result in that query landing at any one of multiple locations responsible for advertising the underlying IP address. 
+- Where the query lands depends on the anycast routing of the Internet, but it is generally going to be the closest network-wise (and hence, low latency) location to the end user.
+### Stripes
+- Behind the scenes, we have thousands of nameserver names (e.g. ns-584.awsdns-09.net) hosted across four top-level domains (.com, .net, .co.uk, and .org). 
+- We refer to all the nameservers in one top-level domain as a ‘stripe;’ thus, we have:
+  - .com stripe
+  - .net stripe
+  - .co.uk stripe
+  - .org stripe.
+### Shiffle sharding 
+- This is where shuffle sharding comes in: each Route 53 domain (hosted zone) receives four nameserver names one from each of stripe. 
+- As a result, it is unlikely that two zones will overlap completely across all four nameservers. 
+- In fact, we enforce a rule during nameserver assignment that no hosted zone can overlap by more than two nameservers with any previously created hosted zone.
