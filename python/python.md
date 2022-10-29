@@ -1,0 +1,5 @@
+- Interpretive language
+- Supports several programming paradigms as:
+  - Procedural programming
+  - Functional programming
+  - Object Oriented Programming

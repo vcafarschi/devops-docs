@@ -75,7 +75,7 @@ r1 = Robot(Tom, red, 30)
 ## cls vs self
 -  **cls** and **self**, neither of them are keywords in python.
 - **cls** and **self** are just ideal naming conventions whose name can be changed and yet the functionality would be the same.
-- 
+
 
 
 ## Self
@@ -84,14 +84,14 @@ r1 = Robot(Tom, red, 30)
 - **Self is always pointing to Current Object.**
 ```
 #it is clearly seen that self and obj is referring to the same object
- 
+
 class check:
     def __init__(self):
         print("Address of self = ",id(self))
- 
+
 obj = check()
 print("Address of class object = ",id(obj))
- 
+
 # this code is Contributed by Samyak Jain
 ```
 
