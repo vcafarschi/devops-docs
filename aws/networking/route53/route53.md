@@ -41,7 +41,7 @@
 - [R53 logs to CloudWatch](#r53-logs-to-cloudwatch)
   - [Anycast DNS](#anycast-dns)
     - [Stripes](#stripes)
-    - [Shiffle sharding](#shiffle-sharding)
+    - [Shuffle sharding](#shuffle-sharding)
 - [Hybrid DNS](#hybrid-dns)
   - [Route53 Resolver Endpoints](#route53-resolver-endpoints)
   - [R53 Resolver Inbound endpoints](#r53-resolver-inbound-endpoints)
@@ -49,6 +49,7 @@
   - [Prerequisites for Hybrid DNS](#prerequisites-for-hybrid-dns)
     - [Hybrid connectivity](#hybrid-connectivity)
 - [To be added in VPC as well](#to-be-added-in-vpc-as-well)
+- [Hybrid DNS with Active Directory](#hybrid-dns-with-active-directory)
 
 # DNS Overview
 
@@ -252,6 +253,7 @@
   ```
 
 ### Record types
+
 - NS (Name Server)
 - SOA (Start of Authority)
 - A record
@@ -426,6 +428,7 @@ When you delegate multiple levels of subdomains in DNS, it is important to alway
 ![phz-vpc-assoc](images/phz-vpc-assoc.svg)
 
 ### Associate Private Hosted Zone (PHZ) with multiple VPCs
+
 ![phz-vpc-assoc](images/phz-multi-vpc-assoc.svg)
 
 ## How do I associate a Route 53 private hosted zone with a VPC that belongs to a different AWS account or Region?
@@ -461,18 +464,18 @@ When you delegate multiple levels of subdomains in DNS, it is important to alway
 - PAY attention, it can resolve records, but can't connect to them if there is no network connectivity
   - For this make sure there is network conn, using VPC Peering, Transit Gateways or other
 
-
 ## Multi Account Decentralized
 
-![](images/phz-multi-account-decentralized.svg)
-- In this type of architecture Route 53 Private Hosted Zones (PHZs) are centralized in a shared services VPC
+![phz-multi-account-decentralized](images/phz-multi-account-decentralized.svg)
+
+- An organization may want to delegate DNS ownership and management to each AWS account.
+- This can have the advantages of decentralization of control and isolating the blast radius for failure to a specific account.
 
 ## Multi Account Centralized
 
-![](images/phz-multi-account-centralized.svg)
-- An organization may want to delegate DNS ownership and management to each AWS account.
-- This can have the advantages of decentralization of control and isolating the blast radius for failure to a specific account.
-- 
+![phz-multi-account-centralized](images/phz-multi-account-centralized.svg)
+
+- In this type of architecture Route 53 Private Hosted Zones (PHZs) are centralized in a shared services VPC
 
 ## Aliases
 
@@ -522,37 +525,53 @@ ARCHITECTURE
 ADD IMAGE
 
 ## Routing policy
-Routing policy determine how Route53 will respond to queries
-- **Simple routing**
-ADD IMAGE
-  - Supports one record per Name
-  - Each record can have multiple values
+
+- Routing policy determine how Route53 will respond to queries
+
+**Simple routing**
+
+- **USE CASE**: use it when you want to route requests towards one service such as web server
+- You can’t create multiple records that have the same name and type
+  - ![routing-policy-simple-1](images/rp-simple-1.svg)
+- But you can specify multiple values in the same record, such as multiple IP addresses
+  - ![routing-policy-simple-1](images/rp-simple-2.svg)
   - All values are returned in a random order
-  - Client chooses and uses 1 value
-  - *USE CASE*: use it when you want to route requests towards one service such as web server
-  - DOES NOT support healtchecks, all values are returned for a record when queried
-- **Failover routing**
-ADD IMAGE
+
+- DOES NOT support health-checks, all values are returned for a record when queried
+- ![routing-policy-simple-1](images/rp-simple.svg)
+
+**Failover routing**
+
+- *USE CASE*: When you want to configure **active/passive** failover architecture
+- Failover routing lets you route traffic to a resource when the resource is healthy or to a different resource when the first resource is unhealthy
+- Have to create a health-check for the "**Primary**" if it's not ELB endpoint.
   - If the target of the health-check is "**Healthy**" the "**Primary**" record is used
-  - If the target of the health-check is "**Unhealthy**" the "**Secondary**" record of the same Domane name is used
-  - A nice bonus is that, because you dont create any health checks of your own, DNS Failover for ELB endpoints is available at no additional charge-you arent charged for any health checks.When setting up DNS Failover for an ELB Endpoint, you simply set Evaluate Target Health to true-you dont create a health check of your own for this endpoint:
-  - *USE CASE*: When you want to configure **active/passive** failover architecture
+  - If the target of the health-check is "**Unhealthy**" the "**Secondary**" record of the same Domain name is used
+- When setting up DNS Failover for an **ELB Endpoint**, you simply set *Evaluate Target Health* to true
+  - But you dont have create a health check of your own for this endpoint, as ELB will do them for you.
+- ![rp-failover](images/rp-failover.svg)
+
+
+**Weighted**
+
+- **USE CASE**: While migration from On-premise to Cloud. You can send 10% to Cloud and leave 90% on-prem and check if there are no complains, so you can then make 30/70 and so on. Kinda Canary deployment strategy.
+- Allows you to split your traffic based on different weights assigned.
+- You create records that have the same name and type and assign each record a relative weight.
+- The weight can be between 0 and 255
+- Can be used in combination with Health-Checks
+- To stop sending traffic to a resource you can change the weight of the record to 0.
+- ![rp-weighted](images/rp-weighted.svg)
+
+
+- **Geolocation**
 ADD EXPLANATION
 ADD IMAGE
 USE CASE
-- Weighted
+- **Latency based**
 ADD EXPLANATION
 ADD IMAGE
 USE CASE
-- Geolocation
-ADD EXPLANATION
-ADD IMAGE
-USE CASE
-- Latency based
-ADD EXPLANATION
-ADD IMAGE
-USE CASE
-- Geoproximity
+- **Geoproximity**
 ADD EXPLANATION
 ADD IMAGE
 USE CASE
@@ -579,7 +598,6 @@ Geolocation vs Latency based
 - DNS response code ans as NoError and ServerFail
 - You can create Cloudwatch Contributor Insights
 
-
 ## Anycast DNS
 
 - One of AWS goals at Amazon Route 53 is to provide low-latency DNS resolution to customers.
@@ -594,23 +612,25 @@ Geolocation vs Latency based
 
 ### Stripes
 
-- Behind the scenes, we have thousands of nameserver names (e.g. ns-584.awsdns-09.net) hosted across four top-level domains (.com, .net, .co.uk, and .org).
+- Behind the scenes, we have thousands of Nameserver names (e.g. ns-584.awsdns-09.net) hosted across four top-level domains (.com, .net, .co.uk, and .org).
 - We refer to all the nameservers in one top-level domain as a ‘stripe;’ thus, we have:
   - .com stripe
   - .net stripe
   - .co.uk stripe
   - .org stripe.
 
-### Shiffle sharding
+### Shuffle sharding
 
-- This is where shuffle sharding comes in: each Route 53 domain (hosted zone) receives four nameserver names one from each of stripe.
+- This is where shuffle sharding comes in: each Route 53 domain (hosted zone) receives four Nameserver names one from each of stripe.
 - As a result, it is unlikely that two zones will overlap completely across all four nameservers.
-- In fact, we enforce a rule during nameserver assignment that no hosted zone can overlap by more than two nameservers with any previously created hosted zone.
+- In fact, we enforce a rule during Nameserver assignment that no hosted zone can overlap by more than two nameservers with any previously created hosted zone.
 
 The longer a TTL, the less load it puts on the authoritative name server.
 
 # Hybrid DNS
+
 - Native Route 53 resolver (+2 offset of the base VPC CIDR) is not reachable from on-premises networks using VPN or AWS Direct Connect. Therefore, when you integrate DNS for the VPCs in an AWS Region with DNS for your network, you need a Route 53 Resolver inbound endpoint (for DNS queries that you are forwarding to your VPCs) and a Route 53 Resolver outbound endpoint (for queries that you are forwarding from your VPCs to your network).
+
 ## Route53 Resolver Endpoints
 
 - Enables hybrid DNS resolution over **AWS Direct Connect** and **Managed VPN** via Resolver Endpoints
@@ -632,9 +652,11 @@ The longer a TTL, the less load it puts on the authoritative name server.
 - Limit 10.000 QPS per ENI
 
 ## R53 Resolver Outbound endpoints
-  - This would enable your AWS resources to resolve the domain names of your on-prem network resources using resolver rules, which would forward selected queries to the on-prem network DNS resolvers.
+
+- This would enable your AWS resources to resolve the domain names of your on-prem network resources using resolver rules, which would forward selected queries to the on-prem network DNS resolvers.
 
 Scenarios:
+
 1. An on-premise client need to resolve the DNS Name of a severs inside of a VPC. The on-premise server contacts an EC2 based DNS Server acting as a Forwarder.
 In this case you had to use DHCP option set in the VPC.
 Diagram !!!
@@ -642,19 +664,19 @@ Diagram !!!
 1. An on-premise client needs to resolve the DNS name o a server inside of a VPC. The on-premise server contacts a DNS Endpoint.
 DIAGRAM !!
 
-
 3. A server in a VPC needs ti access an on-premises client. Route53 uses a Conditional Forwarding Rule to query the on-premise DNS server.
 
 ## Prerequisites for Hybrid DNS
+
 1. Ensure that there's network connectivity between your **on-prem network** and **AWS** via a **VPN connection** or **Direct Connect**.
 2. Enable DNS host names and resolutions in the DNS support attributes in the VPC in which you would create the endpoint.
 
-
 ### Hybrid connectivity
+
 ![](images/hybrid-dns.svg)
 
-
 # To be added in VPC as well
+
 - The Amazon DNS server is an Amazon Route 53 Resolver server
 - Route 53 Resolver enables DNS for instances that need to communicate over the VPC's internet gateway.
 - Route 53 Resolver automatically uses a Resolver on the VPC to answer DNS queries for local Amazon VPC domain names for EC2 instances (ec2-192-0-2-44.compute-1.amazonaws.com) and records in private hosted zones (acme.example.com)
@@ -663,3 +685,7 @@ DIAGRAM !!
 - It's located at the address 169.254.169.253 (and the reserved IP address at the base of the VPC IPv4 network range, plus two
   - For example, the Amazon DNS Server on a 10.0.0.0/16 network is located at 10.0.0.2.
   - For VPCs with multiple IPv4 CIDR blocks, the DNS server IP address is located in the primary CIDR block.
+
+# Hybrid DNS with Active Directory
+
+- Active Directory can be used to forward DNS Queries for non-authoritative domains
