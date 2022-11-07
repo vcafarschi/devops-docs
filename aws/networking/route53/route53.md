@@ -37,6 +37,13 @@
     - [Name servers](#name-servers)
   - [R53 Health checks](#r53-health-checks)
   - [Routing policy](#routing-policy)
+    - [Simple routing](#simple-routing)
+    - [Failover routing](#failover-routing)
+    - [Weighted](#weighted)
+    - [Geolocation](#geolocation)
+    - [Latency based](#latency-based)
+    - [Geoproximity](#geoproximity)
+    - [Geolocation vs Latency based](#geolocation-vs-latency-based)
 - [Multi layer routing policy](#multi-layer-routing-policy)
 - [R53 logs to CloudWatch](#r53-logs-to-cloudwatch)
   - [Anycast DNS](#anycast-dns)
@@ -528,7 +535,7 @@ ADD IMAGE
 
 - Routing policy determine how Route53 will respond to queries
 
-**Simple routing**
+### Simple routing
 
 - **USE CASE**: use it when you want to route requests towards one service such as web server
 - You can’t create multiple records that have the same name and type
@@ -540,7 +547,7 @@ ADD IMAGE
 - DOES NOT support health-checks, all values are returned for a record when queried
 - ![routing-policy-simple-1](images/rp-simple.svg)
 
-**Failover routing**
+### Failover routing
 
 - *USE CASE*: When you want to configure **active/passive** failover architecture
 - Failover routing lets you route traffic to a resource when the resource is healthy or to a different resource when the first resource is unhealthy
@@ -552,7 +559,7 @@ ADD IMAGE
 - ![rp-failover](images/rp-failover.svg)
 
 
-**Weighted**
+### Weighted
 
 - **USE CASE**: While migration from On-premise to Cloud. You can send 10% to Cloud and leave 90% on-prem and check if there are no complains, so you can then make 30/70 and so on. Kinda Canary deployment strategy.
 - Allows you to split your traffic based on different weights assigned.
@@ -563,33 +570,36 @@ ADD IMAGE
 - ![rp-weighted](images/rp-weighted.svg)
 
 
-- **Geolocation**
+### Geolocation
+
+- Geolocation routing lets you choose where your traffic will be sent, based on the geographic location of your users (the location from which DNS queries originate).
+  - For example, you might want all queries from Europe to be routed to an ELB load balancer in the Frankfurt region
+    - The app in Frankfurt may have the English language for European customers and display all prices in Euros.
+
+![rp-geo](images/rp-geo.svg)
+
+### Latency based
 ADD EXPLANATION
 ADD IMAGE
 USE CASE
-- **Latency based**
-ADD EXPLANATION
-ADD IMAGE
-USE CASE
-- **Geoproximity**
+### Geoproximity
 ADD EXPLANATION
 ADD IMAGE
 USE CASE
 
-Geolocation vs Latency based
+### Geolocation vs Latency based
 
-![](images/img1.png)
+
 
 # Multi layer routing policy
 
 # R53 logs to CloudWatch
 
-- So you can run any analitycs Send the logs to:
+- So you can run any analytics Send the logs to:
   - cloudwatch
   - S3
   - Kinesis Firehose
 
-![](images/img2.png)
 
 - domain or subdomain that aws requested
 - date and time of the request
@@ -601,7 +611,7 @@ Geolocation vs Latency based
 ## Anycast DNS
 
 - One of AWS goals at Amazon Route 53 is to provide low-latency DNS resolution to customers.
-- This is implemented by using “anycast” IP addresse from over 50 edge locations around the globe.
+- This is implemented by using “anycast” IP addresses from over 50 edge locations around the globe.
 - Anycast works by routing packets to the closest (network-wise) location that is “advertising” a particular address
 - In the image below, we can see that there are three locations, all of which can receive traffic for the 205.251.194.72 address
 
@@ -689,3 +699,4 @@ DIAGRAM !!
 # Hybrid DNS with Active Directory
 
 - Active Directory can be used to forward DNS Queries for non-authoritative domains
+
