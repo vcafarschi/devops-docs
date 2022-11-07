@@ -103,6 +103,11 @@ Characteristics
 - storage size per node
 - storage type (GP/IO) per node
 
+- With zone awareness enabled, Amazon OpenSearch ensures that each primary shard and its corresponding replica are allocated in different Availability Zones
+- By deploying the data nodes across three Availability Zones with one replica enabled, your shards are distributed across three Availability Zones, leading to increased tolerance for Availability Zone failures.
+  - ![](images/opensearch-data-cross-az.png)
+  - In the event of a single Availability Zone failure, you lose 33 percent of your nodes. This means that 66 percent as many data nodes have to process the same number of read and write requests to your cluster
+
 # Security
 
 OpenSearch Service security has three main layers:
@@ -253,3 +258,6 @@ The following are not encrypted when you enable encryption of data at rest, but 
 - Instead, you can take a manual snapshot of the encrypted domain, create another domain, migrate your data, and delete the old domain.
 
 # Ultra-warm data nodes
+
+
+![]()
