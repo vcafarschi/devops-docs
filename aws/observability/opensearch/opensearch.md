@@ -24,25 +24,29 @@ When not to use OpenSearch ?
 - it's so-so key-value store
 - don't retrieve large result sets
 
-## Architecture
-
-## OpenSearch related Services
-
-- Cloudwatch: to monitor the health and performance
-- CloudTrail: To make API call auditing
-- IAM: access to OpenSearch clusters
-- Lambda
-- S3
-- Dynamo
-- Kinesis
-
 ## Concepts
 
-![](images/concepts.png)
+![](images/concepts.svg)
 
 - Domain: Cluster of nodes / Database
-- Index: Table with a consistent document schema
-- Document: Rows in the table
+- **Index**
+  - An index is a collection of similarly-structured documents that enables quick and efficient data retrieval
+  - The purpose of an index is to store logically-related documents
+  - Indices are identified by their unique names that are used whenever a search, update, or any other operation is performed
+- **Document**
+  - fundamental unit of information entity represented in JSON format which can be stored and indexed
+  - A document in Lucene consists of a simple list of field-value pairs. A field must have at least one value, but any field can contain multiple values.
+  - Each document is assigned a unique ID and categorized as a specific data type that describes it as a certain entity (eg. an article or a log entry).
+
+- **Shard**
+  - Elasticsearch allows you to split the index into smaller pieces known as shards
+  - Each shard is an instance of a Lucene index, which you can think of as a self-contained search engine that indexes and handles queries for a subset of the data in an Elasticsearch cluster
+  - There are two types of shards: primary (active) that hold the data, and replicas, ie. copies of the primary shard.
+
+- **Mapping**
+  - Mapping represents the schema definition for the index
+  - It helps avoid issues caused by automatic field detection which occurs when no mapping is defined
+## Architecture
 
 OpenSearch domain is composed of 2 types of nodes:
 
@@ -260,7 +264,36 @@ The following are not encrypted when you enable encryption of data at rest, but 
 - After you configure a domain to use node-to-node encryption, you can't disable the setting.
 - Instead, you can take a manual snapshot of the encrypted domain, create another domain, migrate your data, and delete the old domain.
 
-# Ultra-warm data nodes
+## Ultra-warm data nodes
+
+- **UltraWarm** provides a cost-effective way to store large amounts of **read-only** data on Amazon OpenSearch Service.
+- Standard data nodes use "**hot**" storage, which takes the form of instance stores or Amazon EBS volumes attached to each node.
+- **Hot** storage provides the **fastest possible** performance for indexing and searching new data.
 
 
-![]()
+- Rather than attached storage, **UltraWarm** nodes use **Amazon S3** and a sophisticated caching solution to improve performance
+- For indexes that you are not actively writing to, query less frequently, and don't need the same performance from, UltraWarm offers significantly lower costs per GiB of data.
+- Because warm indexes are read-only unless you return them to hot storage, UltraWarm is best-suited to **immutable** data, such as logs.
+
+![](images/ultrawarm.svg)
+
+- When calculating UltraWarm storage requirements, you consider only the size of the primary shards.
+- The durability of data in S3 removes the need for replicas, and S3 abstracts away any operating system or service considerations
+
+## Cold Storage
+
+- Cold storage lets you store any amount of infrequently accessed or historical data on your Amazon OpenSearch Service domain and analyze it on demand, at a lower cost than other storage tiers
+- Practical examples of data suitable for cold storage include infrequently accessed logs, data that must be preserved to meet compliance requirements, or logs that have historical value.
+- Similar to UltraWarm storage, cold storage is backed by Amazon S3
+
+## Loading streaming data into Amazon OpenSearch Service
+
+![](images/observability-flow.svg)
+## OpenSearch things to consider
+
+- Configure CloudWatch alarms
+- Enable log publishing
+- Back up your data
+- Enable dedicated master nodes
+- Deploy across multiple Availability Zones
+- Use UltraWarm and cold storage for time-series log data
