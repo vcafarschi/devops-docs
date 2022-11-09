@@ -16,12 +16,13 @@ Basically 2 general areas:
   - Search for products on Amazon, any other websites or applications)
 - Analytics workload
   - Logs, metrics, traces analysis (near real-time)
+  - real-time application monitoring, and clickstream analysis.
+
+When not to use OpenSearch ?
 
 - AWS Elastic Search is not a good durable store
 - it's so-so key-value store
 - don't retrieve large result sets
-
-real-time application monitoring, and clickstream analysis.
 
 ## Architecture
 
@@ -37,6 +38,8 @@ real-time application monitoring, and clickstream analysis.
 
 ## Concepts
 
+![](images/concepts.png)
+
 - Domain: Cluster of nodes / Database
 - Index: Table with a consistent document schema
 - Document: Rows in the table
@@ -46,7 +49,7 @@ OpenSearch domain is composed of 2 types of nodes:
 - **master nodes**
 - **data nodes**
 
-### Dedicated master nodes
+## Dedicated master nodes
 
 Why do we need dedicated master nodes ?
 
@@ -108,7 +111,7 @@ Characteristics
   - ![](images/opensearch-data-cross-az.png)
   - In the event of a single Availability Zone failure, you lose 33 percent of your nodes. This means that 66 percent as many data nodes have to process the same number of read and write requests to your cluster
 
-# Security
+## Security
 
 OpenSearch Service security has three main layers:
 
@@ -125,12 +128,12 @@ OpenSearch Service security has three main layers:
 **Access policy**
 
 - The second security layer is the domain access policy
-- After a request reaches a domain endpoint, the resource-based access policy allows or denies the request access to a given URI
+- After a request reaches a domain endpoint, the **resource-based access policy** *allows* or *denies* the request access to a given URI
 
 **Fine-grained access control**
 
 - The third and final security layer is fine-grained access control
-- After a resource-based access policy allows a request to reach a domain endpoint, fine-grained access control evaluates the user credentials and either authenticates the user or denies the request
+- After a **resource-based access policy** *allows* a request to reach a domain endpoint, **fine-grained access control** evaluates the *user credentials* and either *authenticates* the user or *denies* the request
 - If fine-grained access control authenticates the user, it fetches all roles mapped to that user and uses the complete set of permissions to determine how to handle the request
 
 ## Authentication
