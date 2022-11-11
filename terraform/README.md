@@ -19,7 +19,7 @@ Multi-Cloud Deployment
 
 # Terraform
 
-What is the best way to version and develop modules ?
+## What is the best way to version and develop modules ?
   1. TO have a separate repository for every module (1 module = 1 repository) ?
   2. TO have one repository and multiple modules in it ?
 
@@ -32,22 +32,17 @@ Mono-repo:
     Requires Download of Entire Codebase
     Unmodified Libraries May Be Newly Versioned
 
-
-Multi-repo:
-  Advantages:
-    Each module Can Be Versioned Separately
-    Security per repo
-    Pipeline per repo- makes it fast
-  Disadvantages:
-      Painfull modules-Wide Refactorings
-
-
 Gradually you can break that monorepo down into a bunch of smaller repositories that could be managed by different individuals, or different teams.
 If your team is small, it's recommended to avoid decoupling the infrastructure code into multiple repositories and consider using modules within your existing repositories. A single module on a single repository is an ideal code structure, but this may fit only large teams
 
 A repository for your Terraform module (or perhaps you want to have multiple modules in the same repository).
 A pipeline running Terratest code validating your Terraform module in an isolated environment (e.g. a seperate AWS account).
 Also validation and security scans with e.g. TfSec and TfLint.
+
+
+
+
+
 
 
 When to deploy terraform code locally ?
@@ -119,10 +114,8 @@ terraform init does 3 things:
   1. Use user_data
   2. Create an ami an reuse it
 
-4. How to set up a custom ec2 image . How do you handle aws ami using terraform?
-  - 
 
-5. How do you structure your terraform repositories and why?
+4. How do you structure your terraform repositories and why?
   - Every env like dev, stage, prod should have it's separate directory.
   - Each env folder should be separated to global resources (like s3), datastore (RDS), compute (ec2), and depending on the case the structure can be different
 
@@ -132,3 +125,68 @@ terraform init does 3 things:
   - Data blocks are used to get the information about resources like AZ, AMI and so on.
 
 7. Have you worked with terragrunt. Link -> https://terragrunt.gruntwork.io/
+
+
+# TF best practicies
+
+## Versions Lock
+
+- Modules
+```
+module "smt" {
+  source = "some/path"
+  version = "~4.0"
+}
+```
+
+- Provider
+```
+required_providers {
+  aws = {
+    source = ""
+    version = ""
+  }
+}
+```
+
+- Terraform Versions
+```
+terraform {
+  required_version = "1.3.0"
+}
+```
+
+## tagging resources
+
+```
+provider"aws" {
+  default_tags{
+    tags = {
+      managedBy = "Terraform"
+    }
+  }
+}
+
+- tag everything
+- use default_tags
+- PR enforcement (fail PR if no tags)
+```
+
+## Remote state
+
+- Backup state (i.e S3 versioning)
+- TF state lock (DynamoDB)
+
+
+## Structuring TF code base
+![](tf-code.png)
+
+
+- Use small states
+- Don;t use Huge States
+  - cos you will get long plans as it will query all resources
+  - It will make BIG BLAST RADIUS
+
+## Terraform Execution
+- Remote execution (in pipelines)
+- Don't execute it locally, as you have no audit

@@ -289,6 +289,7 @@ The following are not encrypted when you enable encryption of data at rest, but 
 ## Loading streaming data into Amazon OpenSearch Service
 
 ![](images/observability-flow.svg)
+
 ## OpenSearch things to consider
 
 - Configure CloudWatch alarms
