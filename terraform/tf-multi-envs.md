@@ -54,7 +54,7 @@ Cons
 
 ## Separated Directories Method 3
 
-Separated definitions for separated resurces
+Separated definitions for separated resources
 
 Separated layers improve consistency and make easier rollback
 - application
