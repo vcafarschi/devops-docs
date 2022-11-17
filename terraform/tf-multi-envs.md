@@ -1,57 +1,93 @@
 # How to manage multiple environments with Terraform
 
-- Separated Folders
-- Terragrunt
+- Small-size
+  - separate folders
+  - separate var files
+- Medium-size
+  - separate folders and separate definitions
+  - separate var files and separate definitions
+- Large-size
+  - terragrunt
 
+## Small-size Infrastructure
 
-## Separate Folders (WET) Write Everything Twice
+Advantages:
+
+- Perfect to get started and refactor as you go
+- Perfect for small resource modules
+- Good for small and linear infrastructure modules (eg, terraform-aws-atlantis)
+- Good for a small number of resources (fewer than 20-30)
+
+Disadvantages:
+
+- Single state file for all resources can make the process of working with Terraform slow if the number of resources is growing (consider using an argument -target to limit the number of resources)
+- Blast Radius is big, so in case of messing up with state file, you can break your entire infrastructure
+
+### Small-size Separate Folders
 
 ![tf-layout1](tf-layout1.png)
 
+- (WET) Write Everything Twice type of infrastructure
 - we **duplicate** the same infrastructure in each folder with different values in the **terraform.tfvars** file
 - each folder represents a separate environment
 - when you are running terraform commands you have to navigate to the respective folder and run the three commands **init, plan and apply**
 
-Advantages
+Advantages:
 
+- Small-size Infra advantages applies
 - You can have **dev** environment different than **stage** or **prod**
   - It can have some additional resources or miss some of them
 - Changes in one environment don’t affect other environments
 - You can have a backend in each folder
 
-Disadvantages
+Disadvantages:
 
+- Small-size Infra disadvantages applies
 - Duplication of code
 - If you want to change the resource you have to change it in all environments.
 - This is not ideal when you have the same infrastructure in all environments.
 
-## Separate Var Files (DRY) Don't Repeat Yourself
+### Separate Var Files
 
 ![tf-layout2](tf-layout2.png)
 
+- (DRY) Don't Repeat Yourself type of infrastructure
 - we maintain the same infrastructure in common files but have different **terraform.tfvars** in each environment.
-- Since we are maintaining the same main.tf, variables.tf files, when you are running terraform commands you need to pass different variables based on the environment
+- Since we are maintaining the same **main.tf**, **variables.tf** files, when you are running terraform commands you need to pass different variables based on the environment
 
 ```bash
 // Dev Environment
-terraform plan --var-file="tfvars/environment/dev.tfvars"
+terraform plan --var-file="tfvars/environments/dev.tfvars"
 // QA Environment
-terraform plan --var-file="tfvars/environment/qa.tfvars"
+terraform plan --var-file="tfvars/environments/qa.tfvars"
 // Prod Environment
-terraform plan --var-file="tfvars/environment/prod.tfvars"
+terraform plan --var-file="tfvars/environments/prod.tfvars"
  ```
 
 Pros
 
+- Small-size Infra advantages applies
 - there is no duplication of code
 - If you want to change the resource you don’t have to change in all the environments.
 
 Cons
 
+- Small-size Infra disadvantages applies
 - You can’t easily add or remove resources in each environment
 - Changes in one environment do affect other environments since we are using the same files with different var files.
 
-## Separate Directories Method 3
+### Small-size Separate Folders VS Separate Var Files
+
+- Assume that you decided to go with Small-size Infrastructure.
+- But you don't know which one to use **Small-size Separate Folders** or **Separate Var Files** ?
+- If you think that you will have slightly different (not identical) infrastructure in **dev**, **stage** and **prod**, then go with **Separate Var Files**
+
+## Medium-size Infrastructure
+
+
+### Separate folders and separate definitions
+
+### separate var files and separate definitions
 
 Separated definitions for separated resources
 
@@ -109,7 +145,8 @@ It is easier to clean up when you remove something
 It's easy to tell what module need to be fixed. I use some tools I wrote to analyze status of particular parts of infrastructure and I can send email to particular developer, that his infrastructure needs resync for some reasons.
 You can have different environments easier than in the monolith. You can destroy single app if you do not need it in environment
 
-## terragrunt
+## Large-size Infrastructure
+### Terragrunt
 
 
 
