@@ -1,13 +1,15 @@
 # How to manage multiple environments with Terraform
 
-- Small-size
-  - separate folders
-  - separate var files
-- Medium-size
-  - separate folders and separate definitions
-  - separate var files and separate definitions
-- Large-size
-  - terragrunt
+- [How to manage multiple environments with Terraform](#how-to-manage-multiple-environments-with-terraform)
+  - [Small-size Infrastructure](#small-size-infrastructure)
+    - [Separate-Folders](#separate-folders)
+    - [Separate-Var-Files](#separate-var-files)
+    - [Separate-Folders VS Separate-Var-Files](#separate-folders-vs-separate-var-files)
+  - [Medium-size Infrastructure](#medium-size-infrastructure)
+    - [Separate-folders with Separate-definitions](#separate-folders-with-separate-definitions)
+    - [Separate-var-files and Separate-definitions](#separate-var-files-and-separate-definitions)
+  - [Large-size Infrastructure](#large-size-infrastructure)
+    - [Terragrunt](#terragrunt)
 
 ## Small-size Infrastructure
 
@@ -23,7 +25,7 @@ Disadvantages:
 - Single state file for all resources can make the process of working with Terraform slow if the number of resources is growing (consider using an argument -target to limit the number of resources)
 - Blast Radius is big, so in case of messing up with state file, you can break your entire infrastructure
 
-### Small-size Separate Folders
+### Separate-Folders
 
 ![tf-layout1](tf-layout1.png)
 
@@ -47,7 +49,7 @@ Disadvantages:
 - If you want to change the resource you have to change it in all environments.
 - This is not ideal when you have the same infrastructure in all environments.
 
-### Separate Var Files
+### Separate-Var-Files
 
 ![tf-layout2](tf-layout2.png)
 
@@ -64,19 +66,19 @@ terraform plan --var-file="tfvars/environments/qa.tfvars"
 terraform plan --var-file="tfvars/environments/prod.tfvars"
  ```
 
-Pros
+Advantages
 
 - Small-size Infra advantages applies
 - there is no duplication of code
 - If you want to change the resource you don’t have to change in all the environments.
 
-Cons
+Disadvantages
 
 - Small-size Infra disadvantages applies
 - You can’t easily add or remove resources in each environment
 - Changes in one environment do affect other environments since we are using the same files with different var files.
 
-### Small-size Separate Folders VS Separate Var Files
+### Separate-Folders VS Separate-Var-Files
 
 - Assume that you decided to go with Small-size Infrastructure.
 - But you don't know which one to use **Small-size Separate Folders** or **Separate Var Files** ?
@@ -84,14 +86,14 @@ Cons
 
 ## Medium-size Infrastructure
 
-
-### Separate folders and separate definitions
-
-### separate var files and separate definitions
+### Separate-folders with Separate-definitions
 
 Separated definitions for separated resources
 
-Separated layers improve consistency and make easier rollback
+- ISOLATE THINGS THAT CHANGE FREQUENTLY FROM THOSE WHICH DON'T CHANGE FREQUENTLY
+- Separated layers improve consistency and make easier rollback
+- This way you have smaller state files and you minimize blast radius
+
 - application
 - data
 - networking
@@ -102,7 +104,7 @@ Separated layers improve consistency and make easier rollback
 
 Dependencies between layers can be solved with data sources. The existing resources in the cloud or outputs from the remote states can be fetched
 
-```
+```python
 data "terraform_remote_state" "network" {
   backend = "s3"
 
@@ -131,19 +133,23 @@ $ terraform -chdir="./environments/staging/application" apply
 
 Cons:
 
-It is hard to check if all modules are in sync
-Complicated CI
-Complicated directory structure especially for new people in the team, but it is logic
-There may be a lot of dependencies, but this is not a problem when you think about it from the beginning.
-You need to take care, to keep exactly the same environments.
-There is a lot of initialization required and refactors are hard to do.
+- It is hard to check if all modules are in sync
+- Complicated CI
+- Complicated directory structure especially for new people in the team, but it is logic
+- There may be a lot of dependencies, but this is not a problem when you think about it from the beginning.
+- You need to take care, to keep exactly the same environments.
+- There is a lot of initialization required and refactors are hard to do.
+
 Pros:
 
-Quick apply after small changes
-Separated applications and resources. It is easy to modify small module or small deployment for it without knowledge about overall system
-It is easier to clean up when you remove something
-It's easy to tell what module need to be fixed. I use some tools I wrote to analyze status of particular parts of infrastructure and I can send email to particular developer, that his infrastructure needs resync for some reasons.
-You can have different environments easier than in the monolith. You can destroy single app if you do not need it in environment
+- Quick apply after small changes
+- Separated applications and resources. It is easy to modify small module or small deployment for it without knowledge about overall system
+- It is easier to clean up when you remove something
+- It's easy to tell what module need to be fixed. I use some tools I wrote to analyze status of particular parts of infrastructure and I can send email to particular developer, that his infrastructure needs resync for some reasons.
+- You can have different environments easier than in the monolith. You can destroy single app if you do not need it in environment
+
+### Separate-var-files and Separate-definitions
+
 
 ## Large-size Infrastructure
 ### Terragrunt
@@ -164,3 +170,5 @@ You can have different environments easier than in the monolith. You can destroy
 
 small logical state files
 minimizes blast radius
+different settings in each environment (when you can have different variables for dev and prod)
+different version in each environment (when you can deploy like alb-v1 in dev and alb-v2 in prod or even have nlb in prod and missing nlb in dev)
