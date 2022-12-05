@@ -35,30 +35,73 @@
 
 ### Messages
 
-- The unit of data within Kafka is called a message
-- From database point of view, you can think of this as similar to a row or a record
-- A message is simply an array of bytes as far as Kafka is concerned, so the data contained within it does not have a specific format or meaning to Kafka
+- The unit of data within Kafka is called a **message**
+- From database point of view, you can think of this as similar to a **row** or a **record**
+- A **message** is simply an **array of bytes** as far as Kafka is concerned, so the data contained within it does not have a specific format or meaning to Kafka
 
 ---
 
-- A message can have an optional piece of metadata, which is referred to as a **key**
-- The key is also a byte array and, as with the message, has no specific meaning to Kafka.
-- Keys are used when messages are to be written to partitions in a more controlled manner.
+- A message can have an **optional piece of metadata**, which is referred to as a **key**
+- The **key** is also an **array of bytes** and, as with the message, has no specific meaning to Kafka.
+- Keys are used when messages are to be written to partitions in a more **controlled manner**.
 
 ---
 
 - For efficiency, messages are written into Kafka in **batches**.
 - An individual round trip across the network for each message would result in excessive over‐head, and collecting messages together into a batch reduces this.
-- Batches are also typically compressed, providing more efficient data trans‐fer and storage at the cost of some processing power
+- **Batches** are also typically **compressed**, providing more efficient data transfer and storage at the cost of some processing power.
 
 ---
 
 ### Message Delivery
 
-- Message delivery can take at least one of the following delivery method
-- AT LEAST ONCE
-- AT MOST ONCE
-- EXACTLY ONCE
+Message delivery can take at least one of the following delivery method
+
+- at-most-once
+- at-least-once
+- exactly-once
+
+!["message-delivery"](images/message-delivery.svg)
+
+#### **at-most-once**
+
+- Message will be delivered **once** or **not at all** (not guaranteed delivery)
+- Messages may be lost but are not re-delivered
+
+---
+
+- Producer may send message once and never retry.
+- If the message fails or is not acknowledged, the producer will never send the message again.
+
+---
+
+- **Use cases**: It is suitable for use cases like monitoring metrics, where a small amount of data loss is acceptable.
+
+#### **at-least-once**
+
+- it’s acceptable to deliver a message more than once
+- no message should be lost
+
+---
+
+- A producer can send the message more than once.
+- If message fails or is not acknowledged, the Producer can send the message again.
+- The consumer may have to eliminate the duplicate messages.
+
+---
+
+- **Use cases**: good enough for use cases where data duplication is not a big issue or deduplication is possible on the consumer side. For example, with a unique key in each message, a message can be rejected when writing duplicate data to the database.
+
+#### **exactly-once**
+
+- the most difficult delivery semantic to implement
+- the message can neither be lost nor duplicated
+- it is friendly to users, but it has a high cost for the system’s performance and complexity
+
+---
+
+- **Use cases**: Financial-related use cases (payment, trading, accounting, etc.). Exactly once is especially important when duplication is not acceptable and the downstream service or third party doesn’t support idempotency. 
+
 
 ### Schemas
 
