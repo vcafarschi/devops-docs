@@ -1,29 +1,3 @@
-# MSK (Apache Kafka)
-
-
-
-## Commit log
-
-- These are append-only sequences of records order by time. More importantly, these logs are the source of truth for the state of data across the entire organization. And, because this state is centralized, it can then become the source of truth for a horizontally scaled, ever-evolving, multi-faceted application architecture.
-- You can think of a log as acting as a kind of messaging system with durability guarantees and strong ordering semantics. In distributed systems, this model of communication sometimes goes by the (somewhat terrible) name of atomic broadcast. (Kindle, Location 295)
-
-- [MSK (Apache Kafka)](#msk-apache-kafka)
-  - [Commit log](#commit-log)
-  - [Use cases](#use-cases)
-  - [Architecture](#architecture)
-    - [Messages](#messages)
-    - [Message Delivery](#message-delivery)
-    - [Schemas](#schemas)
-    - [Topics](#topics)
-    - [Partitions](#partitions)
-    - [Brokers](#brokers)
-  - [Producers](#producers)
-    - [Reliability](#reliability)
-  - [Consumers](#consumers)
-  - [Zookeeper](#zookeeper)
-
-
-
 ## Use cases
 
 ## Architecture
@@ -176,5 +150,53 @@ Message delivery can take at least one of the following delivery method
 
 
 
-#######
-- Messages and Schemas
+### Why distributed systems (Zookeper) need an odd number of nodes ?
+
+- Zookeeper always runs in a **standalone** or **quorum mode**.
+
+What is a **quorum**?
+
+- A minimum number of nodes in a ZK cluster needs to be up and running, for a ZK cluster to work.
+- Any update request from the client is considered safe if it has written to the minimum number of nodes equal to the quorum size.
+- Zookeeper cluster will still be up and running, even if there are node failures as long as it can form a quorum (has a number of nodes equal to or greater than a quorum size)
+
+How do we decide what is the safest and optimal size of a quorum?
+
+- The Size of the Quorum = (n/2 +1)
+- where “n” is the total number of nodes
+- So, for a 5 node cluster, it needs (5/2+1) = 3 nodes to form a quorum.
+
+Why (n/2 +1) ?
+
+![](images/quorum.svg)
+
+- Let’s consider that we have a 5 node cluster, in which 3 nodes in data centre DC1 and 2 nodes in a different data centre DC2.
+- Assume the quorum size of the above cluster is 2.
+
+---
+
+- Now, if there is a network failure between the two data centres then both the clusters will be able to form a quorum of size 2 nodes
+- Hence, both the quorums in the 2 different data centres start accepting write requests from clients
+- As a result, there will be data inconsistencies between the servers in the two data centres, as the servers in one datacenter can’t communicate updates to other servers in different data centre.
+- This leads to a common problem called “**split-brain**” problem, where two or more subsets of the cluster function independently
+- **The quorum size of (n/2 + 1) ensures that we do not have the split-brain problem and we can always achieve a majority consensus.**
+- Hence, for the above cluster to form a quorum the minimum nodes required must be 5/2 +1=3.
+- So, which means in the above scenario, DC2 nodes cannot form a quorum and hence can not accept any write requests.
+
+so Why odd number of nodes is configured?
+
+- Lets say our ZK has 5 nodes
+- in this case we need a minimum of 3 nodes for quorum and for zookeeper to keep serving the client request
+- for a 5 nodes cluster, we can tolerate up to a failure of 2 nodes(5–3)
+
+---
+
+- Lets say our ZK has 6 nodes
+- in this case we need a minimum of 3 nodes for quorum and for zookeeper to keep serving the client request
+- For for a 6 nodes cluster, we can tolerate up to a failure of 2 nodes(5–3)
+
+---
+
+- So 5 nodes Cluster allows us to Tolerate 2 nodes failure and 6 nodes as well allows to tolerate 2 nodes failure.
+- It just adds an overhead of managing an extra node
+- In conclusion, adding an even number of nodes doesn’t give any advantages here

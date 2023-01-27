@@ -1,0 +1,1 @@
+ZooKeeper is a CP system with regard to the CAP theorem
