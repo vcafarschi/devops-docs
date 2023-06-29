@@ -10,3 +10,5 @@
     "workbench.colorCustomizations": {
       "tree.indentGuidesStroke": "#008070"
     }
+
+test
